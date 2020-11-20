@@ -8,6 +8,8 @@
  */
 
 public class AVLTree {
+	private IAVLNode root;
+	
 
   /**
    * public boolean empty()
@@ -16,9 +18,10 @@ public class AVLTree {
    *
    */
   public boolean empty() {
-    return true; // to be replaced by student code
+    return root == null;
   }
 
+  
  /**
    * public String search(int k)
    *
@@ -27,7 +30,16 @@ public class AVLTree {
    */
   public String search(int k)
   {
-	return "42";  // to be replaced by student code
+	IAVLNode node = this.root;
+	while (node != null) {
+		if (k == node.getKey()) 
+			return node.getValue();
+		else if (k < node.getKey())
+			node = node.getLeft();
+		else
+			node = node.getRight();
+	}
+	return null;
   }
 
   /**
