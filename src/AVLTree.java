@@ -32,14 +32,14 @@ public class AVLTree {
   {
 	IAVLNode node = this.root;
 	while (node != null) {
-		if (k == node.getKey()) 
-			return node.getValue();
-		else if (k < node.getKey())
+		if (k == node.getKey()) // if the key is found
+			return node.getValue(); 
+		else if (k < node.getKey()) // if the key is smaller than node's key
 			node = node.getLeft();
-		else
+		else // if the key is bigger than node's key
 			node = node.getRight();
 	}
-	return null;
+	return null; // if key isn't in the tree
   }
 
   /**
