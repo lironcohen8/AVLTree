@@ -77,7 +77,11 @@ public class AVLTree {
     */
    public String min()
    {
-	   return "42"; // to be replaced by student code
+	   IAVLNode node = this.root;
+	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
+		   node = node.getLeft();
+	   }
+	   return node.getValue();
    }
 
    /**
@@ -88,7 +92,11 @@ public class AVLTree {
     */
    public String max()
    {
-	   return "42"; // to be replaced by student code
+	   IAVLNode node = this.root;
+	   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
+		   node = node.getRight();
+	   }
+	   return node.getValue();
    }
 
   /**
