@@ -111,10 +111,23 @@ public class AVLTree {
    */
   public int[] keysToArray()
   {
-        Stack s = new Stack();
-        int[] arr = new int[this.size];
-        
-        
+	  Stack<IAVLNode> s = new Stack<IAVLNode>(); // creating a stack to hold keys that we saw but didn't add to the array
+      int[] arr = new int[this.size];
+      int index = 0;
+      IAVLNode cur = this.root;
+      while (cur.getKey() != -1 || s.peek() != null) {
+    	  if (cur.getKey() != -1) {
+    		  s.push(cur);
+    		  cur = cur.getLeft();
+    		  }
+    	  else {
+    		  IAVLNode n = s.pop();
+    		  arr[index] = n.getKey();
+    		  index++;
+    		  cur = n.getRight();
+    		  }
+        }
+     return arr;
   }
 
   /**
