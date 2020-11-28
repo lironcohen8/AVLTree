@@ -186,7 +186,7 @@ public class AVLTree {
     */
    public IAVLNode getRoot()
    {
-	   return null;
+	   return this.root;
    }
      /**
     * public string split(int x)
