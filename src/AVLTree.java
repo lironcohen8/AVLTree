@@ -102,6 +102,35 @@ public class AVLTree {
 	   }
 	   return node.getValue();
    }
+   
+   /**
+    * public IAVLNode[] nodesToArray()
+    *
+    * Returns a sorted array which contains all nodes in the tree,
+    * sorted by their respective keys,
+    * or an empty array if the tree is empty.
+    */
+   private IAVLNode[] nodesToArray()
+   {
+	   Stack<IAVLNode> s = new Stack<IAVLNode>(); // creating a stack to hold keys that we saw but didn't add to the array
+	   IAVLNode[] arr = new IAVLNode[this.size]; // creating the keys array that we will return
+	   int index = 0; // index of the cur node in array
+	   IAVLNode cur = this.root; // starting from root
+	   while (cur.getKey() != -1 || s.peek() != null) { // until cur is a virtual leaf or the stack is empty
+		   if (cur.getKey() != -1) {
+			   s.push(cur); 
+			   cur = cur.getLeft();
+			   }
+		   else { // got to a virtual leaf
+			   IAVLNode n = s.pop(); // cur minimum
+			   arr[index] = n; // adding to arr
+			   index++;
+			   cur = n.getRight(); // moving to the right
+			   }
+		   }
+	   return arr;
+   }
+   
 
   /**
    * public int[] keysToArray()
@@ -111,23 +140,11 @@ public class AVLTree {
    */
   public int[] keysToArray()
   {
-	  Stack<IAVLNode> s = new Stack<IAVLNode>(); // creating a stack to hold keys that we saw but didn't add to the array
-      int[] arr = new int[this.size];
-      int index = 0;
-      IAVLNode cur = this.root;
-      while (cur.getKey() != -1 || s.peek() != null) {
-    	  if (cur.getKey() != -1) {
-    		  s.push(cur);
-    		  cur = cur.getLeft();
-    		  }
-    	  else {
-    		  IAVLNode n = s.pop();
-    		  arr[index] = n.getKey();
-    		  index++;
-    		  cur = n.getRight();
-    		  }
-        }
-     return arr;
+	  IAVLNode[] nodesArr = nodesToArray();
+	  int[] arr = new int[this.size];
+	  for (int i=0; i<arr.length; i++)
+		  arr[i] = nodesArr[i].getKey();
+	  return arr;
   }
 
   /**
@@ -139,8 +156,11 @@ public class AVLTree {
    */
   public String[] infoToArray()
   {
-        String[] arr = new String[42]; // to be replaced by student code
-        return arr;                    // to be replaced by student code
+	  IAVLNode[] nodesArr = nodesToArray();
+	  String[] arr = new String[this.size];
+	  for (int i=0; i<arr.length; i++)
+		  arr[i] = nodesArr[i].getValue();
+	  return arr;
   }
 
    /**
