@@ -18,7 +18,7 @@ public class AVLTree {
    *
    */
   public boolean empty() {
-    return root == null;
+    return root == null; // checking if the root is null
   }
 
   
@@ -202,13 +202,13 @@ public class AVLTree {
    * (It must implement IAVLNode)
    */
   public class AVLNode implements IAVLNode{
-	  	private int key;
-	  	private String info;
-	  	private IAVLNode parent;
-	  	private IAVLNode left;
-	  	private IAVLNode right;
-	  	private boolean isReal;
-	  	private int height;
+	  	private int key; // the key of the node
+	  	private String info; // the value of the node
+	  	private IAVLNode parent; // a reference to the node's parent
+	  	private IAVLNode left; // a reference to the node's left son
+	  	private IAVLNode right; // a reference to the node's right son
+	  	private boolean isReal; // if the node is real or virtual 
+	  	private int height; // keeps the node's height in the tree
 	  	
 	  	public AVLNode(int key, String info) 
 	  	{
