@@ -13,6 +13,19 @@ public class AVLTree {
 	private IAVLNode root;
 	private int size;
 
+	
+  /**
+   * public AVLTree()
+   *
+   * constructs an empty AVLTree
+   *
+   */
+  public AVLTree() {
+	  this.root = null;
+	  this.size = 0;
+  }
+	
+	
   /**
    * public boolean empty()
    *
