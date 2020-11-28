@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 /**
  *
  * AVLTree
@@ -9,7 +11,7 @@
 
 public class AVLTree {
 	private IAVLNode root;
-	
+	private int size;
 
   /**
    * public boolean empty()
@@ -53,6 +55,7 @@ public class AVLTree {
    */
    public int insert(int k, String i) {
 	  return 42;	// to be replaced by student code
+	// update size attribute
    }
 
   /**
@@ -67,6 +70,7 @@ public class AVLTree {
    public int delete(int k)
    {
 	   return 42;	// to be replaced by student code
+	   // update size attribute
    }
 
    /**
@@ -107,8 +111,10 @@ public class AVLTree {
    */
   public int[] keysToArray()
   {
-        int[] arr = new int[42]; // to be replaced by student code
-        return arr;              // to be replaced by student code
+        Stack s = new Stack();
+        int[] arr = new int[this.size];
+        
+        
   }
 
   /**
@@ -134,7 +140,7 @@ public class AVLTree {
     */
    public int size()
    {
-	   return 42; // to be replaced by student code
+	   return this.size;
    }
    
      /**
@@ -215,7 +221,7 @@ public class AVLTree {
 	  		this.key = key;
 	  		this.info = info;
 	  		if (key != -1)
-	  			this.isReal = false;
+	  			this.isReal = true;
 	  	}
 	  
 		public int getKey()
