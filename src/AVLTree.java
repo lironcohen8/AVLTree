@@ -108,6 +108,8 @@ public class AVLTree {
 	  else
 		  return (AVLNode)p.getLeft();
   }
+
+  
   
   private int rankDiff(AVLNode p, AVLNode c) {
 	  return p.getRank()-c.getRank();
@@ -124,7 +126,22 @@ public class AVLTree {
 		  if (rankDiff(p, otherChild(p, n)) == 1)
 			  return promote(p) + rebalance(p);
 		  else {
-			  
+			  if (p.getLeft() == n) {
+				  if (rankDiff(n, (AVLNode)n.getLeft()) == 1 
+					&& rankDiff(n, (AVLNode)n.getRight()) == 2) 
+						  return rightRotate(n);
+				  else if (rankDiff(n, (AVLNode)n.getLeft()) == 2 
+					&& rankDiff(n, (AVLNode)n.getRight()) == 1) 
+						  return doubleRightRotate(n);
+			  }
+			  else {
+				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
+					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) 
+						  return leftRotate(n);
+				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
+					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) 
+					      return doubleLeftRotate(n);
+			  }			  
 		  }
 	  }
 	  else { // case B
