@@ -118,8 +118,7 @@ public class AVLTree {
 	  return 1;
   }
   
-  private int rightRotate(AVLNode n) {
-	  AVLNode z = (AVLNode)n.getParent();
+  private int rightRotate(AVLNode z, AVLNode n) {
 	  AVLNode p = (AVLNode)z.getParent();
 	  
 	  z.setLeft(n.getRight());
@@ -139,8 +138,7 @@ public class AVLTree {
 	  return 2; // one for rotating and one for demoting z
   }
   
-  private int leftRotate(AVLNode n) {
-	  AVLNode z = (AVLNode)n.getParent();
+  private int leftRotate(AVLNode z, AVLNode n) {
 	  AVLNode p = (AVLNode)z.getParent();
 	  
 	  z.setRight(n.getLeft());
@@ -160,6 +158,22 @@ public class AVLTree {
 	  return 2; // one for rotating and one for demoting z
   }
   
+  private int leftRightRotate(AVLNode z, AVLNode n) {
+	  int num = 0;
+	  num += leftRotate(z, n);
+	  num += rightRotate((AVLNode)z.getParent(), z);
+	  num += promote(n);
+	  return num; // 2 rotations, 2 demotions, 1 promotion
+  }
+  
+  private int rightLeftRotate(AVLNode z, AVLNode n) {
+	  int num = 0;
+	  num += rightRotate(z, n);
+	  num += leftRotate((AVLNode)z.getParent(), z);
+	  num += promote(n);
+	  return num; // 2 rotations, 2 demotions, 1 promotion
+  }  
+  
   private int rebalance(AVLNode n) {
 	  AVLNode p = (AVLNode)n.getParent();
 	  if (rankDiff(p, n) == 0) { // case A
@@ -169,18 +183,18 @@ public class AVLTree {
 			  if (p.getLeft() == n) {
 				  if (rankDiff(n, (AVLNode)n.getLeft()) == 1 
 					&& rankDiff(n, (AVLNode)n.getRight()) == 2) 
-						  return rightRotate(n);
+						  return rightRotate(p, n);
 				  else if (rankDiff(n, (AVLNode)n.getLeft()) == 2 
 					&& rankDiff(n, (AVLNode)n.getRight()) == 1) 
-						  return doubleRightRotate(n);
+						  return leftRightRotate(n, (AVLNode)n.getRight());
 			  }
 			  else {
 				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
 					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) 
-						  return leftRotate(n);
+						  return leftRotate(p, n);
 				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
 					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) 
-					      return doubleLeftRotate(n);
+					      return rightLeftRotate(n, (AVLNode)n.getLeft());
 			  }			  
 		  }
 	  }
