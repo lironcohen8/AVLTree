@@ -108,8 +108,6 @@ public class AVLTree {
 	  else
 		  return (AVLNode)p.getLeft();
   }
-
-  
   
   private int rankDiff(AVLNode p, AVLNode c) {
 	  return p.getRank()-c.getRank();
@@ -118,6 +116,48 @@ public class AVLTree {
   private int promote(AVLNode n) {
 	  n.setRank(n.getRank()+1);
 	  return 1;
+  }
+  
+  private int rightRotate(AVLNode n) {
+	  AVLNode z = (AVLNode)n.getParent();
+	  AVLNode p = (AVLNode)z.getParent();
+	  
+	  z.setLeft(n.getRight());
+	  z.getLeft().setParent(z);
+	  
+	  n.setRight(z);
+	  z.setParent(n);
+	  
+	  n.setParent(p);
+	  if (p != null) {
+		  if (p.getLeft() == z) 
+			  p.setLeft(n);
+		  else
+			  p.setRight(n);
+	  }
+	  z.setRank(z.getRank()-1); // demoting z
+	  return 2; // one for rotating and one for demoting z
+  }
+  
+  private int leftRotate(AVLNode n) {
+	  AVLNode z = (AVLNode)n.getParent();
+	  AVLNode p = (AVLNode)z.getParent();
+	  
+	  z.setRight(n.getLeft());
+	  z.getRight().setParent(z);
+	  
+	  n.setLeft(z);
+	  z.setParent(n);
+	  
+	  n.setParent(p);
+	  if (p != null) {
+		  if (p.getLeft() == z) 
+			  p.setLeft(n);
+		  else
+			  p.setRight(n);
+	  }
+	  z.setRank(z.getRank()-1); // demoting z
+	  return 2; // one for rotating and one for demoting z
   }
   
   private int rebalance(AVLNode n) {
