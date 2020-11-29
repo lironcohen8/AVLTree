@@ -135,18 +135,25 @@ public class AVLTree {
 	  n.setRank(n.getRank()+1);
 	  return 1;
   }
-  
+
+  /**
+   * private int rightRotate(AVLNode z, AVLNode n)
+   *
+   * The method gets a parent node and its son, whom between is the edge to rotate.
+   * The method updates the relevant references and makes the relevant rank changes.
+   * The method returns 2 (one for rotation and one for demotion).
+   */  
   private int rightRotate(AVLNode z, AVLNode n) {
 	  AVLNode p = (AVLNode)z.getParent();
 	  
-	  z.setLeft(n.getRight());
+	  z.setLeft(n.getRight()); 
 	  z.getLeft().setParent(z);
 	  
 	  n.setRight(z);
 	  z.setParent(n);
 	  
 	  n.setParent(p);
-	  if (p != null) {
+	  if (p != null) { // updating n to be the parent's child instead of z
 		  if (p.getLeft() == z) 
 			  p.setLeft(n);
 		  else
@@ -156,6 +163,13 @@ public class AVLTree {
 	  return 2; // one for rotating and one for demoting z
   }
   
+  /**
+   * private int leftRotate(AVLNode z, AVLNode n)
+   *
+   * The method gets a parent node and its son, whom between is the edge to rotate.
+   * The method updates the relevant references and makes the relevant rank changes.
+   * The method returns 2 (one for rotation and one for demotion).
+   */
   private int leftRotate(AVLNode z, AVLNode n) {
 	  AVLNode p = (AVLNode)z.getParent();
 	  
@@ -166,7 +180,7 @@ public class AVLTree {
 	  z.setParent(n);
 	  
 	  n.setParent(p);
-	  if (p != null) {
+	  if (p != null) { // updating n to be the parent's child instead of z
 		  if (p.getLeft() == z) 
 			  p.setLeft(n);
 		  else
@@ -175,7 +189,14 @@ public class AVLTree {
 	  z.setRank(z.getRank()-1); // demoting z
 	  return 2; // one for rotating and one for demoting z
   }
-  
+
+  /**
+   * private int leftRightRotate(AVLNode z, AVLNode n)
+   *
+   * The method gets a parent node and its son, whom between is the first edge to rotate.
+   * The method calls left rotation and then right rotation for the second edge to rotate.
+   * The method returns 5 (2 for rotations, 2 for demotions and 1 for promotion).
+   */  
   private int leftRightRotate(AVLNode z, AVLNode n) {
 	  int num = 0;
 	  num += leftRotate(z, n);
@@ -183,7 +204,14 @@ public class AVLTree {
 	  num += promote(n);
 	  return num; // 2 rotations, 2 demotions, 1 promotion
   }
-  
+
+  /**
+   * private int rightLeftRotate(AVLNode z, AVLNode n)
+   *
+   * The method gets a parent node and its son, whom between is the first edge to rotate.
+   * The method calls right rotation and then left rotation for the second edge to rotate.
+   * The method returns 5 (2 for rotations, 2 for demotions and 1 for promotion).
+   */  
   private int rightLeftRotate(AVLNode z, AVLNode n) {
 	  int num = 0;
 	  num += rightRotate(z, n);
@@ -191,32 +219,41 @@ public class AVLTree {
 	  num += promote(n);
 	  return num; // 2 rotations, 2 demotions, 1 promotion
   }  
-  
+
+  /**
+   * private int rebalance(AVLNode n)
+   *
+   * The method gets a node and rebalances the tree according to node's state.
+   * The method calls promote and rotations if needed.
+   * The method returns sum of rebalancing operations that were taken.
+   */   
   private int rebalance(AVLNode n) {
 	  AVLNode p = (AVLNode)n.getParent();
-	  if (rankDiff(p, n) == 0) { // case A
-		  if (rankDiff(p, otherChild(p, n)) == 1)
+	  if (this.getRoot() == n)
+		  return 0;
+	  if (rankDiff(p, n) == 0) { // rank difference 0
+		  if (rankDiff(p, otherChild(p, n)) == 1) // needs promotion
 			  return promote(p) + rebalance(p);
 		  else {
 			  if (p.getLeft() == n) {
 				  if (rankDiff(n, (AVLNode)n.getLeft()) == 1 
-					&& rankDiff(n, (AVLNode)n.getRight()) == 2) 
+					&& rankDiff(n, (AVLNode)n.getRight()) == 2) // right rotation 
 						  return rightRotate(p, n);
 				  else if (rankDiff(n, (AVLNode)n.getLeft()) == 2 
-					&& rankDiff(n, (AVLNode)n.getRight()) == 1) 
+					&& rankDiff(n, (AVLNode)n.getRight()) == 1) // leftRight rotation
 						  return leftRightRotate(n, (AVLNode)n.getRight());
 			  }
 			  else {
 				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
-					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) 
+					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) // left rotation
 						  return leftRotate(p, n);
 				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
-					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) 
+					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) // rightLeft rotation
 					      return rightLeftRotate(n, (AVLNode)n.getLeft());
 			  }			  
 		  }
 	  }
-	  return 0;
+	  return 0; // no rebalancing operation was taken
   }
   
   /**
@@ -230,13 +267,13 @@ public class AVLTree {
    */
    public int insert(int k, String i) {
 	   AVLNode n = new AVLNode(k, i);
-	   int num = insertBST(n);
-	   if (num == -1)
+	   int num = insertBST(n); //inserting n according to BST rules
+	   if (num == -1) // if the key already exists in tree
 		   return -1;
 	   else {
-		   num = rebalance(n);
+		   num = rebalance(n); // rebalancing the tree
 	   }
-	   return num;
+	   return num; // return number of rebalancing operations
    }
 
   /**
