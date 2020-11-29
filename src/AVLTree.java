@@ -46,7 +46,7 @@ public class AVLTree {
   public String search(int k)
   {
 	IAVLNode node = this.root;
-	while (node != null) {
+	while (node.getKey() != -1) {
 		if (k == node.getKey()) // if the key is found
 			return node.getValue(); 
 		else if (k < node.getKey()) // if the key is smaller than node's key
@@ -56,18 +56,63 @@ public class AVLTree {
 	}
 	return null; // if key isn't in the tree
   }
+  
+  /**
+   * private IAVLNode treePosition(int k)
+   *
+   * finds the place to insert the given key,
+   * return the place's node parent.
+   * if the key exists in tree, returns the existing node with the given key.
+   **/
+  private IAVLNode treePosition(int k) {
+	  IAVLNode x = this.getRoot();
+	  IAVLNode y = x;
+	  while (x.getKey() != -1) { // until encounters a virtual leaf
+		  y = x;
+		  if (k == x.getKey())
+			  return x; // returns the node with the given key if found in tree
+		  else if (k < x.getKey())
+			  x = x.getLeft();
+		  else 
+			  x = x.getRight();
+	  }
+	  return y; // return the parent
+  }
 
+  /**
+   * public int insertBST(IAVLNode n)
+   *
+   * inserts node to the AVL tree in the right position according to BST invariants.
+   * The method doesn't rebalance the tree.
+   * The method return -1 if the key existed in tree before inserting, and 1 if the insertion succeeded.
+   */
+  private int insertBST(IAVLNode n) {
+	IAVLNode y = treePosition(n.getKey()); // return the parent of the new node
+	n.setParent(y); // set the new node's parent
+	if (n.getKey() == y.getKey()) // the node is already in the tree
+		return -1;
+	if (n.getKey() < y.getKey()) // set as the left child
+		y.setLeft(n);
+	else if (n.getKey() > y.getKey()) // set as the right child
+		y.setRight(n);
+	this.size++;
+	return 1;
+  }
+  
   /**
    * public int insert(int k, String i)
    *
    * inserts an item with key k and info i to the AVL tree.
    * the tree must remain valid (keep its invariants).
    * returns the number of rebalancing operations, or 0 if no rebalancing operations were necessary.
-   * promotion/rotation - counted as one rebalnce operation, double-rotation is counted as 2.
+   * promotion/rotation - counted as one rebalance operation, double-rotation is counted as 2.
    * returns -1 if an item with key k already exists in the tree.
    */
    public int insert(int k, String i) {
-	  return 42;	// to be replaced by student code
+	   IAVLNode n = new AVLNode(k, i);
+	   insertBST(n);
+	  
+	   
 	// update size attribute
    }
 
@@ -261,6 +306,7 @@ public class AVLTree {
 	  	private IAVLNode right; // a reference to the node's right son
 	  	private boolean isReal; // if the node is real or virtual 
 	  	private int height; // keeps the node's height in the tree
+	  	private int rank; // keeps the node's rank 
 	  	
 	  	public AVLNode(int key, String info) 
 	  	{
@@ -268,6 +314,11 @@ public class AVLTree {
 	  		this.info = info;
 	  		if (key != -1)
 	  			this.isReal = true;
+	  			this.setLeft(new AVLNode(-1, "")); // creates by default the left child as a virtual leaf
+	  			this.setRight(new AVLNode(-1, "")); // creates by default the right child as a virtual leaf
+	  		if (key == -1)
+	  			this.rank = -1;
+	  		
 	  	}
 	  
 		public int getKey()
@@ -314,6 +365,14 @@ public class AVLTree {
 	    public int getHeight()
 	    {
 	    	return this.height;
+	    }
+	    public void setRank(int rank)
+	    {
+	    	this.rank = rank;
+	    }
+	    public int getRank()
+	    {
+	    	return this.rank;
 	    }
   }
 
