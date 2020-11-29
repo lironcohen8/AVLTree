@@ -64,17 +64,17 @@ public class AVLTree {
    * return the place's node parent.
    * if the key exists in tree, returns the existing node with the given key.
    **/
-  private IAVLNode treePosition(int k) {
-	  IAVLNode x = this.getRoot();
-	  IAVLNode y = x;
+  private AVLNode treePosition(int k) {
+	  AVLNode x = (AVLNode)this.getRoot();
+	  AVLNode y = x;
 	  while (x.getKey() != -1) { // until encounters a virtual leaf
 		  y = x;
 		  if (k == x.getKey())
 			  return x; // returns the node with the given key if found in tree
 		  else if (k < x.getKey())
-			  x = x.getLeft();
+			  x = (AVLNode)x.getLeft();
 		  else 
-			  x = x.getRight();
+			  x = (AVLNode)x.getRight();
 	  }
 	  return y; // return the parent
   }
@@ -86,17 +86,50 @@ public class AVLTree {
    * The method doesn't rebalance the tree.
    * The method return -1 if the key existed in tree before inserting, and 1 if the insertion succeeded.
    */
-  private int insertBST(IAVLNode n) {
-	IAVLNode y = treePosition(n.getKey()); // return the parent of the new node
+  private int insertBST(AVLNode n) {
+	AVLNode y = treePosition(n.getKey()); // return the parent of the new node
 	n.setParent(y); // set the new node's parent
+	n.setRank(0); // making sure the rank of the new node is 0
 	if (n.getKey() == y.getKey()) // the node is already in the tree
 		return -1;
-	if (n.getKey() < y.getKey()) // set as the left child
+	if (n.getKey() < y.getKey()) { // set as the left child
 		y.setLeft(n);
-	else if (n.getKey() > y.getKey()) // set as the right child
+	}
+	else if (n.getKey() > y.getKey()) { // set as the right child
 		y.setRight(n);
+	}
 	this.size++;
 	return 1;
+  }
+  
+  private AVLNode otherChild(AVLNode p, AVLNode c) {
+	  if (p.getLeft() == c)
+		  return (AVLNode)p.getRight();
+	  else
+		  return (AVLNode)p.getLeft();
+  }
+  
+  private int rankDiff(AVLNode p, AVLNode c) {
+	  return p.getRank()-c.getRank();
+  }
+  
+  private int promote(AVLNode n) {
+	  n.setRank(n.getRank()+1);
+	  return 1;
+  }
+  
+  private int rebalance(AVLNode n) {
+	  AVLNode p = (AVLNode)n.getParent();
+	  if (rankDiff(p, n) == 0) { // case A
+		  if (rankDiff(p, otherChild(p, n)) == 1)
+			  return promote(p) + rebalance(p);
+		  else {
+			  
+		  }
+	  }
+	  else { // case B
+		  return 0;
+	  }
   }
   
   /**
@@ -109,11 +142,14 @@ public class AVLTree {
    * returns -1 if an item with key k already exists in the tree.
    */
    public int insert(int k, String i) {
-	   IAVLNode n = new AVLNode(k, i);
-	   insertBST(n);
-	  
-	   
-	// update size attribute
+	   AVLNode n = new AVLNode(k, i);
+	   int num = insertBST(n);
+	   if (num == -1)
+		   return -1;
+	   else {
+		   num = rebalance(n);
+	   }
+	   return num;
    }
 
   /**
