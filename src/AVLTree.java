@@ -102,6 +102,12 @@ public class AVLTree {
 	return 1;
   }
   
+  /**
+   * private AVLNode otherChild(AVLNode p, AVLNode c)
+   *
+   * The method gets a parent node and a child node.
+   * The method returns the parent's son which is not the given son.
+   */
   private AVLNode otherChild(AVLNode p, AVLNode c) {
 	  if (p.getLeft() == c)
 		  return (AVLNode)p.getRight();
@@ -109,10 +115,22 @@ public class AVLTree {
 		  return (AVLNode)p.getLeft();
   }
   
+  /**
+   * AVLNode rankDiff(AVLNode p, AVLNode c)
+   *
+   * The method gets a parent node and a child node.
+   * The method returns the rank differences between the two nodes.
+   */
   private int rankDiff(AVLNode p, AVLNode c) {
 	  return p.getRank()-c.getRank();
   }
   
+  /**
+   * private int promote(AVLNode n)
+   *
+   * The method gets a node and add 1 to its rank.
+   * The method returns 1.
+   */
   private int promote(AVLNode n) {
 	  n.setRank(n.getRank()+1);
 	  return 1;
