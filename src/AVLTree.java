@@ -198,9 +198,7 @@ public class AVLTree {
 			  }			  
 		  }
 	  }
-	  else { // case B
-		  return 0;
-	  }
+	  return 0;
   }
   
   /**
