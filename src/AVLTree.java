@@ -129,13 +129,24 @@ public class AVLTree {
   /**
    * private int promote(AVLNode n)
    *
-   * The method gets a node and add 1 to its rank.
+   * The method gets a node and adds 1 to its rank.
    * The method returns 1.
    */
   private int promote(AVLNode n) {
 	  n.setRank(n.getRank()+1);
 	  return 1;
   }
+  
+  /**
+   * private int demote(AVLNode n)
+   *
+   * The method gets a node and subs 1 to its rank.
+   * The method returns 1.
+   */
+  private int demote(AVLNode n) {
+	  n.setRank(n.getRank()-1);
+	  return 1;
+  }  
 
   /**
    * private int rightRotate(AVLNode z, AVLNode n)
@@ -162,7 +173,7 @@ public class AVLTree {
 		  }
 	  else
 		  this.root = n;
-	  z.setRank(z.getRank()-1); // demoting z
+	  demote(z); // demoting z
 	  return 2; // one for rotating and one for demoting z
   }
   
@@ -191,7 +202,7 @@ public class AVLTree {
 	  }
 	  else
 		  this.root = n; // the new root
-	  z.setRank(z.getRank()-1); // demoting z
+	  demote(z); // demoting z
 	  return 2; // one for rotating and one for demoting z
   }
 
