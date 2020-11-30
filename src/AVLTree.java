@@ -102,6 +102,65 @@ public class AVLTree {
 	this.size++;
 	return 1;
   }
+
+  
+  /**
+   * public int deleteBST(IAVLNode n)
+   *
+   * deletes node from the AVL tree according to BST invariants.
+   * The method doesn't rebalance the tree.
+   * The method return -1 if the key doesn't exist in tree before deleting, and 1 if the deletion succeeded.
+   */
+  private int deleteBST(AVLNode n) {
+	AVLNode y = (AVLNode)n.getParent(); // return the parent of the node
+	
+	if (n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) { // deleting a leaf
+		if (y.getLeft() == n) { // node is a left leaf
+			y.setLeft(n.getLeft());
+			n.getLeft().setParent(y);
+			}
+		else { // node is a right leaf
+			y.setRight(n.getRight());
+			n.getRight().setParent(y);
+			}
+		}
+	else if (n.getLeft().getKey() == -1 || n.getRight().getKey() == -1) { // deleting an unary node
+			if (y.getLeft() == n) { // node is a left child
+				if (n.getLeft().getKey() == 1) {// wants to replace with right child
+					y.setLeft(n.getRight());
+					n.getRight().setParent(y);
+				}
+				else { // wants to replace with left child
+					y.setLeft(n.getLeft());
+					n.getLeft().setParent(y);
+				}
+			}
+			else { // node is a right child
+				if (n.getLeft().getKey() == 1) {// wants to replace with right child
+					y.setRight(n.getRight());
+					n.getRight().setParent(y);
+				}
+				else { // wants to replace with left child
+					y.setRight(n.getLeft());
+					n.getLeft().setParent(y);
+				}
+				
+			}
+		}
+	else { // deleting a node with two children
+		AVLNode m = successor(n);
+		int num = deleteBST(m);
+		if (y.getLeft() == n) // node is a left child
+			y.setLeft(m);
+		else
+			y.setRight(m);
+		m.setParent(y);
+		n.getLeft().setParent(m);
+		n.getRight().setParent(m);
+		}
+	this.size--;
+	return 1;
+  }
   
   /**
    * private AVLNode otherChild(AVLNode p, AVLNode c)
@@ -307,9 +366,21 @@ public class AVLTree {
    */
    public int delete(int k)
    {
-	   return 42;	// to be replaced by student code
-	   // update size attribute
+	   AVLNode p = treePosition(k); // returns the parent of the wanted node
+	   AVLNode n = null;
+	   if (p.getLeft().getKey() == k)
+		   n = (AVLNode)p.getLeft();
+	   else if (p.getRight().getKey() == k)
+		   n = (AVLNode)p.getRight();
+	   else
+		   return -1; // not in tree
+	   
+	   int num = deleteBST(n); // deleting n according to BST rules
+	   
+	   //	   int num = rebalance(n); // rebalancing the tree
+	   return num; // return number of rebalancing operations
    }
+
 
    /**
     * public String min()
