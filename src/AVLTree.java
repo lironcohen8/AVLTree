@@ -386,8 +386,9 @@ public class AVLTree {
    */
    public int delete(int k)
    {
-	   AVLNode p = treePosition(k); // returns the parent of the wanted node
-	   AVLNode n = null;
+	   AVLNode n = treePosition(k); // returns the wanted node
+	   AVLNode p = (AVLNode)n.getParent();
+	   
 	   if (p.getLeft().getKey() == k)
 		   n = (AVLNode)p.getLeft();
 	   else if (p.getRight().getKey() == k)
@@ -649,19 +650,36 @@ public class AVLTree {
   }
 
 public static void main(String args[]) {
-	int n = 50;
-	printableTree tree = new printableTree();
-	Random rand = new Random();
-	//int[] arr = {4,8,9,11,10};
-	for (int i=0; i<10; i++) {
-		int val = rand.nextInt(n);
-		System.out.println("number is : " + val);
-		String info = Integer.toString(val);
-		tree.insert(val, info);
+	boolean isRand = false;
+	if (isRand) {
+		int n = 50;
+		printableTree tree = new printableTree();
+		Random rand = new Random();
+		for (int i=0; i<10; i++) {
+			int val = rand.nextInt(n);
+			System.out.println("number is : " + val);
+			String info = Integer.toString(val);
+			tree.insert(val, info);
+			tree.printTree();
+			System.out.println();
+			}
+	}
+	else {
+		printableTree tree = new printableTree();
+		int[] arr = {4,8,9};
+		for (int val : arr) {
+			System.out.println("number is : " + val);
+			String info = Integer.toString(val);
+			tree.insert(val, info);
+			tree.printTree();
+			System.out.println();
+			}
+		System.out.println("deleting 9:");
+		tree.delete(9);
 		tree.printTree();
 		System.out.println();
-		}
 	}
+}
   
 }
   
