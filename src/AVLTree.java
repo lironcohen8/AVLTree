@@ -668,7 +668,7 @@ public static void main(String args[]) {
 	}
 	else {
 		printableTree tree = new printableTree();
-		int[] arr = {4,8,9,10};
+		int[] arr = {4,8,9,10,3,2};
 		for (int val : arr) {
 			System.out.println("number is : " + val);
 			String info = Integer.toString(val);
@@ -676,8 +676,8 @@ public static void main(String args[]) {
 			tree.printTree();
 			System.out.println();
 			}
-		System.out.println("deleting 8:");
-		tree.delete(8);
+		System.out.println("deleting 4:");
+		tree.delete(4);
 		tree.printTree();
 		System.out.println();
 	}
