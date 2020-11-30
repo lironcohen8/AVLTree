@@ -547,18 +547,18 @@ public class AVLTree {
   }
 
 public static void main(String args[]) {
-	//int n = 5;
+	int n = 50;
 	printableTree tree = new printableTree();
-	//Random rand = new Random();
-	int[] arr = {4,8,9,11,10};
-	for (int i : arr) {
-		//int val = rand.nextInt(n);
-		String info = Integer.toString(i);
-		tree.insert(i, info);
+	Random rand = new Random();
+	//int[] arr = {4,8,9,11,10};
+	for (int i=0; i<10; i++) {
+		int val = rand.nextInt(n);
+		System.out.println("number is : " + val);
+		String info = Integer.toString(val);
+		tree.insert(val, info);
 		tree.printTree();
 		System.out.println();
 		}
-	tree.printTree();
 	}
   
 }
