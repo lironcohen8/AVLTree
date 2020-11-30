@@ -145,7 +145,7 @@ public class AVLTree {
 		}
 	else if (n.getLeft().getKey() == -1 || n.getRight().getKey() == -1) { // deleting an unary node
 			if (y.getLeft() == n) { // node is a left child
-				if (n.getLeft().getKey() == 1) {// wants to replace with right child
+				if (n.getLeft().getKey() == -1) {// wants to replace with right child
 					y.setLeft(n.getRight());
 					n.getRight().setParent(y);
 				}
@@ -155,7 +155,7 @@ public class AVLTree {
 				}
 			}
 			else { // node is a right child
-				if (n.getLeft().getKey() == 1) {// wants to replace with right child
+				if (n.getLeft().getKey() == -1) {// wants to replace with right child
 					y.setRight(n.getRight());
 					n.getRight().setParent(y);
 				}
@@ -169,13 +169,20 @@ public class AVLTree {
 	else { // deleting a node with two children
 		AVLNode m = successor(n);
 		deleteBST(m); // deleting successor from tree
-		if (y.getLeft() == n) // adding successor instead of node
-			y.setLeft(m); 
+		if (y != null) { // n is not the root
+			if (y.getLeft() == n) // adding successor instead of node
+				y.setLeft(m); 
+			else
+				y.setRight(m);
+		}
 		else
-			y.setRight(m);
+			this.root = m;
+		
 		m.setParent(y);
 		n.getLeft().setParent(m);
+		m.setLeft(n.getLeft());
 		n.getRight().setParent(m);
+		m.setRight(n.getRight());
 		}
 	
 	this.size--;
@@ -387,14 +394,9 @@ public class AVLTree {
    public int delete(int k)
    {
 	   AVLNode n = treePosition(k); // returns the wanted node
-	   AVLNode p = (AVLNode)n.getParent();
 	   
-	   if (p.getLeft().getKey() == k)
-		   n = (AVLNode)p.getLeft();
-	   else if (p.getRight().getKey() == k)
-		   n = (AVLNode)p.getRight();
-	   else
-		   return -1; // not in tree
+	   if (n.getKey() != k) // not in tree
+		   return -1; 
 	   
 	   int num = deleteBST(n); // deleting n according to BST rules
 	   
@@ -666,7 +668,7 @@ public static void main(String args[]) {
 	}
 	else {
 		printableTree tree = new printableTree();
-		int[] arr = {4,8,9};
+		int[] arr = {4,8,9,10};
 		for (int val : arr) {
 			System.out.println("number is : " + val);
 			String info = Integer.toString(val);
@@ -674,8 +676,8 @@ public static void main(String args[]) {
 			tree.printTree();
 			System.out.println();
 			}
-		System.out.println("deleting 9:");
-		tree.delete(9);
+		System.out.println("deleting 8:");
+		tree.delete(8);
 		tree.printTree();
 		System.out.println();
 	}
