@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -158,7 +159,9 @@ public class AVLTree {
 			  p.setLeft(n);
 		  else
 			  p.setRight(n);
-	  }
+		  }
+	  else
+		  this.root = n;
 	  z.setRank(z.getRank()-1); // demoting z
 	  return 2; // one for rotating and one for demoting z
   }
@@ -186,6 +189,8 @@ public class AVLTree {
 		  else
 			  p.setRight(n);
 	  }
+	  else
+		  this.root = n; // the new root
 	  z.setRank(z.getRank()-1); // demoting z
 	  return 2; // one for rotating and one for demoting z
   }
@@ -245,8 +250,8 @@ public class AVLTree {
 			  }
 			  else {
 				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
-					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) // left rotation
-						  return leftRotate(p, n);
+					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) {// left rotation
+						  return leftRotate(p, n); }
 				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
 					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) // rightLeft rotation
 					      return rightLeftRotate(n, (AVLNode)n.getLeft());
@@ -267,6 +272,10 @@ public class AVLTree {
    */
    public int insert(int k, String i) {
 	   AVLNode n = new AVLNode(k, i);
+	   if (this.getRoot() == null) { // if the tree is empty
+		   this.root = n;
+		   return 0;
+	   }
 	   int num = insertBST(n); //inserting n according to BST rules
 	   if (num == -1) // if the key already exists in tree
 		   return -1;
@@ -472,12 +481,13 @@ public class AVLTree {
 	  	{
 	  		this.key = key;
 	  		this.info = info;
-	  		if (key != -1)
+	  		if (key != -1) {
 	  			this.isReal = true;
 	  			this.setLeft(new AVLNode(-1, "")); // creates by default the left child as a virtual leaf
 	  			this.setRight(new AVLNode(-1, "")); // creates by default the right child as a virtual leaf
-	  		if (key == -1)
-	  			this.rank = -1;
+	  		}
+	  			else
+	  				this.rank = -1;
 	  		
 	  	}
 	  
@@ -536,6 +546,21 @@ public class AVLTree {
 	    }
   }
 
+public static void main(String args[]) {
+	//int n = 5;
+	printableTree tree = new printableTree();
+	//Random rand = new Random();
+	int[] arr = {4,8,9};
+	for (int i : arr) {
+		//int val = rand.nextInt(n);
+		String info = Integer.toString(i);
+		tree.insert(i, info);
+		tree.printTree();
+		System.out.println();
+		}
+	tree.printTree();
+	}
+  
 }
   
 

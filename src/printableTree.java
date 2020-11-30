@@ -63,9 +63,9 @@ public class printableTree extends AVLTree {
                     char c = ' ';
                     if (j % 2 == 1) {
                         if (line.get(j - 1) != null) {
-                            c = (line.get(j) != null) ? '┴' : '┘';
+                            c = (line.get(j) != null) ? '-' : '-';
                         } else {
-                            if (j < line.size() && line.get(j) != null) c = '└';
+                            if (j < line.size() && line.get(j) != null) c = '-';
                         }
                     }
                     System.out.print(c);
@@ -78,11 +78,11 @@ public class printableTree extends AVLTree {
                     } else {
 
                         for (int k = 0; k < hpw; k++) {
-                            System.out.print(j % 2 == 0 ? " " : "─");
+                            System.out.print(j % 2 == 0 ? '-' : '-');
                         }
-                        System.out.print(j % 2 == 0 ? "┌" : "┐");
+                        System.out.print(j % 2 == 0 ? '-' : '-');
                         for (int k = 0; k < hpw; k++) {
-                            System.out.print(j % 2 == 0 ? "─" : " ");
+                            System.out.print(j % 2 == 0 ? '-' : " ");
                         }
                     }
                 }
@@ -117,3 +117,4 @@ public class printableTree extends AVLTree {
 
     }
 }
+
