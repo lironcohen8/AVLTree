@@ -205,7 +205,7 @@ public class AVLTree {
   private int leftRightRotate(AVLNode z, AVLNode n) {
 	  int num = 0;
 	  num += leftRotate(z, n);
-	  num += rightRotate((AVLNode)z.getParent(), z);
+	  num += rightRotate((AVLNode)n.getParent(), n);
 	  num += promote(n);
 	  return num; // 2 rotations, 2 demotions, 1 promotion
   }
@@ -220,7 +220,7 @@ public class AVLTree {
   private int rightLeftRotate(AVLNode z, AVLNode n) {
 	  int num = 0;
 	  num += rightRotate(z, n);
-	  num += leftRotate((AVLNode)z.getParent(), z);
+	  num += leftRotate((AVLNode)n.getParent(), n);
 	  num += promote(n);
 	  return num; // 2 rotations, 2 demotions, 1 promotion
   }  
@@ -550,7 +550,7 @@ public static void main(String args[]) {
 	//int n = 5;
 	printableTree tree = new printableTree();
 	//Random rand = new Random();
-	int[] arr = {4,8,9};
+	int[] arr = {4,8,9,11,10};
 	for (int i : arr) {
 		//int val = rand.nextInt(n);
 		String info = Integer.toString(i);
