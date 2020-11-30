@@ -81,7 +81,7 @@ public class AVLTree {
   }
 
   /**
-   * public int insertBST(IAVLNode n)
+   * private int insertBST(IAVLNode n)
    *
    * inserts node to the AVL tree in the right position according to BST invariants.
    * The method doesn't rebalance the tree.
@@ -103,9 +103,29 @@ public class AVLTree {
 	return 1;
   }
 
+
+  /**
+   * private AVLNode successor(AVLNode n)
+   *
+   * gets a node and return its successor node.
+   */
+  private AVLNode successor(AVLNode n) {
+	  AVLNode cur = n;
+	  if (n.getRight().getKey() != -1) {// node has a real right child
+		  cur = (AVLNode)n.getRight();
+		  while (cur.getLeft().getKey() != -1)
+			  cur = (AVLNode)cur.getLeft();
+		  return cur;
+	  }
+	  else { // node doesn't have a real right child
+		  while (cur.getParent().getRight() == cur) // cur is a right child
+			  cur = (AVLNode)cur.getParent();
+		  return (AVLNode)cur.getParent();
+	  }
+  }
   
   /**
-   * public int deleteBST(IAVLNode n)
+   * private int deleteBST(IAVLNode n)
    *
    * deletes node from the AVL tree according to BST invariants.
    * The method doesn't rebalance the tree.
@@ -113,7 +133,6 @@ public class AVLTree {
    */
   private int deleteBST(AVLNode n) {
 	AVLNode y = (AVLNode)n.getParent(); // return the parent of the node
-	
 	if (n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) { // deleting a leaf
 		if (y.getLeft() == n) { // node is a left leaf
 			y.setLeft(n.getLeft());
@@ -149,15 +168,16 @@ public class AVLTree {
 		}
 	else { // deleting a node with two children
 		AVLNode m = successor(n);
-		int num = deleteBST(m);
-		if (y.getLeft() == n) // node is a left child
-			y.setLeft(m);
+		deleteBST(m); // deleting successor from tree
+		if (y.getLeft() == n) // adding successor instead of node
+			y.setLeft(m); 
 		else
 			y.setRight(m);
 		m.setParent(y);
 		n.getLeft().setParent(m);
 		n.getRight().setParent(m);
 		}
+	
 	this.size--;
 	return 1;
   }
