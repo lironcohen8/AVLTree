@@ -124,70 +124,6 @@ public class AVLTree {
 	  }
   }
   
-  /**
-   * private int deleteBST(IAVLNode n)
-   *
-   * deletes node from the AVL tree according to BST invariants.
-   * The method doesn't rebalance the tree.
-   * The method return -1 if the key doesn't exist in tree before deleting, and 1 if the deletion succeeded.
-   */
-  private int deleteBST(AVLNode n) {
-	AVLNode y = (AVLNode)n.getParent(); // return the parent of the node
-	if (n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) { // deleting a leaf
-		if (y.getLeft() == n) { // node is a left leaf
-			y.setLeft(n.getLeft());
-			n.getLeft().setParent(y);
-			}
-		else { // node is a right leaf
-			y.setRight(n.getRight());
-			n.getRight().setParent(y);
-			}
-		}
-	else if (n.getLeft().getKey() == -1 || n.getRight().getKey() == -1) { // deleting an unary node
-			if (y.getLeft() == n) { // node is a left child
-				if (n.getLeft().getKey() == -1) {// wants to replace with right child
-					y.setLeft(n.getRight());
-					n.getRight().setParent(y);
-				}
-				else { // wants to replace with left child
-					y.setLeft(n.getLeft());
-					n.getLeft().setParent(y);
-				}
-			}
-			else { // node is a right child
-				if (n.getLeft().getKey() == -1) {// wants to replace with right child
-					y.setRight(n.getRight());
-					n.getRight().setParent(y);
-				}
-				else { // wants to replace with left child
-					y.setRight(n.getLeft());
-					n.getLeft().setParent(y);
-				}
-				
-			}
-		}
-	else { // deleting a node with two children
-		AVLNode m = successor(n);
-		deleteBST(m); // deleting successor from tree
-		if (y != null) { // n is not the root
-			if (y.getLeft() == n) // adding successor instead of node
-				y.setLeft(m); 
-			else
-				y.setRight(m);
-		}
-		else
-			this.root = m;
-		
-		m.setParent(y);
-		n.getLeft().setParent(m);
-		m.setLeft(n.getLeft());
-		n.getRight().setParent(m);
-		m.setRight(n.getRight());
-		}
-	
-	this.size--;
-	return 1;
-  }
   
   /**
    * private AVLNode otherChild(AVLNode p, AVLNode c)
@@ -323,19 +259,19 @@ public class AVLTree {
   }  
 
   /**
-   * private int rebalance(AVLNode n)
+   * private int rebalanceInsert(AVLNode n)
    *
    * The method gets a node and rebalances the tree according to node's state.
    * The method calls promote and rotations if needed.
    * The method returns sum of rebalancing operations that were taken.
    */   
-  private int rebalance(AVLNode n) {
+  private int rebalanceInsert(AVLNode n) {
 	  AVLNode p = (AVLNode)n.getParent();
 	  if (this.getRoot() == n)
 		  return 0;
 	  if (rankDiff(p, n) == 0) { // rank difference 0
 		  if (rankDiff(p, otherChild(p, n)) == 1) // needs promotion
-			  return promote(p) + rebalance(p);
+			  return promote(p) + rebalanceInsert(p);
 		  else {
 			  if (p.getLeft() == n) {
 				  if (rankDiff(n, (AVLNode)n.getLeft()) == 1 
@@ -355,7 +291,7 @@ public class AVLTree {
 			  }			  
 		  }
 	  }
-	  return 0; // no rebalancing operation was taken
+	  return 0; // no rebalancing operations were taken
   }
   
   /**
@@ -377,9 +313,112 @@ public class AVLTree {
 	   if (num == -1) // if the key already exists in tree
 		   return -1;
 	   else {
-		   num = rebalance(n); // rebalancing the tree
+		   num = rebalanceInsert(n); // rebalancing the tree
 	   }
 	   return num; // return number of rebalancing operations
+   }
+
+   /**
+    * private void deleteBST(IAVLNode n)
+    *
+    * deletes node from the AVL tree according to BST invariants.
+    * The method doesn't rebalance the tree.
+    */
+   private void deleteBST(AVLNode n) {
+ 	AVLNode y = (AVLNode)n.getParent(); // return the parent of the node
+ 	if (n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) { // deleting a leaf
+ 		if (y.getLeft() == n) { // node is a left leaf
+ 			y.setLeft(n.getLeft());
+ 			n.getLeft().setParent(y);
+ 			}
+ 		else { // node is a right leaf
+ 			y.setRight(n.getRight());
+ 			n.getRight().setParent(y);
+ 			}
+ 		}
+ 	else if (n.getLeft().getKey() == -1 || n.getRight().getKey() == -1) { // deleting an unary node
+ 			if (y.getLeft() == n) { // node is a left child
+ 				if (n.getLeft().getKey() == -1) {// wants to replace with right child
+ 					y.setLeft(n.getRight());
+ 					n.getRight().setParent(y);
+ 				}
+ 				else { // wants to replace with left child
+ 					y.setLeft(n.getLeft());
+ 					n.getLeft().setParent(y);
+ 				}
+ 			}
+ 			else { // node is a right child
+ 				if (n.getLeft().getKey() == -1) {// wants to replace with right child
+ 					y.setRight(n.getRight());
+ 					n.getRight().setParent(y);
+ 				}
+ 				else { // wants to replace with left child
+ 					y.setRight(n.getLeft());
+ 					n.getLeft().setParent(y);
+ 				}
+ 				
+ 			}
+ 		}
+ 	else { // deleting a node with two children
+ 		AVLNode m = successor(n);
+ 		deleteBST(m); // deleting successor from tree
+ 		if (y != null) { // n is not the root
+ 			if (y.getLeft() == n) // adding successor instead of node
+ 				y.setLeft(m); 
+ 			else
+ 				y.setRight(m);
+ 		}
+ 		else
+ 			this.root = m;
+ 		
+ 		m.setParent(y);
+ 		n.getLeft().setParent(m);
+ 		m.setLeft(n.getLeft());
+ 		n.getRight().setParent(m);
+ 		m.setRight(n.getRight());
+ 		}
+ 	
+ 	this.size--;
+   }
+   
+   
+   /**
+    * private int rebalanceDelete(AVLNode n)
+    *
+    * The method gets a node and rebalances the tree according to node's state.
+    * The method calls promote and rotations if needed.
+    * The method returns sum of rebalancing operations that were taken.
+    */   
+   private int rebalanceDelete(AVLNode p) {
+	  AVLNode leftChild = (AVLNode)p.getLeft();
+	  AVLNode rightChild = (AVLNode)p.getRight();
+	  
+ 	  if (rankDiff(p, leftChild) == 2 && rankDiff(p, rightChild) == 2) // rank differences 2,2
+ 			  return demote(p) + rebalanceDelete((AVLNode)p.getParent());
+ 	  else if (rankDiff(p, leftChild) == 3 && rankDiff(p, rightChild) == 1) {// rank differences 3,1
+ 		  if (rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1 
+ 				  && rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 1) 
+ 	  }
+ 	  
+ 		  else {
+ 			  if (p.getLeft() == n) {
+ 				  if (rankDiff(n, (AVLNode)n.getLeft()) == 1 
+ 					&& rankDiff(n, (AVLNode)n.getRight()) == 2) // right rotation 
+ 						  return rightRotate(p, n);
+ 				  else if (rankDiff(n, (AVLNode)n.getLeft()) == 2 
+ 					&& rankDiff(n, (AVLNode)n.getRight()) == 1) // leftRight rotation
+ 						  return leftRightRotate(n, (AVLNode)n.getRight());
+ 			  }
+ 			  else {
+ 				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
+ 					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) {// left rotation
+ 						  return leftRotate(p, n); }
+ 				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
+ 					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) // rightLeft rotation
+ 					      return rightLeftRotate(n, (AVLNode)n.getLeft());
+ 			  }			  
+ 		  }
+ 	  return 0; // no rebalancing operation was taken
    }
 
   /**
@@ -398,9 +437,17 @@ public class AVLTree {
 	   if (n.getKey() != k) // not in tree
 		   return -1; 
 	   
-	   int num = deleteBST(n); // deleting n according to BST rules
+	   if (n.getParent() == null && n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) {// deleted the noly node in tree 
+		   this.root = null;
+		   return 0;
+	   }
 	   
-	   //	   int num = rebalance(n); // rebalancing the tree
+	   AVLNode p = (AVLNode)n.getParent();
+	   //deleted the root??
+	   
+	   deleteBST(n); // deleting n according to BST rules
+	   
+	   int num = rebalanceDelete(p); // rebalancing the tree
 	   return num; // return number of rebalancing operations
    }
 
@@ -580,7 +627,9 @@ public class AVLTree {
 	  	private IAVLNode right; // a reference to the node's right son
 	  	private boolean isReal; // if the node is real or virtual 
 	  	private int height; // keeps the node's height in the tree
-	  	private int rank; // keeps the node's rank 
+	  	private int rank; // keeps the node's rank
+	  	private int rankDiffL; // keeps the node's rank difference with left child 
+	  	private int rankDiffR; // keeps the node's rank difference with right child 
 	  	
 	  	public AVLNode(int key, String info) 
 	  	{
@@ -590,9 +639,16 @@ public class AVLTree {
 	  			this.isReal = true;
 	  			this.setLeft(new AVLNode(-1, "")); // creates by default the left child as a virtual leaf
 	  			this.setRight(new AVLNode(-1, "")); // creates by default the right child as a virtual leaf
+	  			this.rank = 0;
+	  			this.rankDiffL = 1;
+	  			this.rankDiffR = 1;
 	  		}
-	  			else
+	  			else {
 	  				this.rank = -1;
+	  				this.rankDiffL = -1;
+	  				this.rankDiffR = -1;
+	  			}
+	  		
 	  		
 	  	}
 	  
@@ -641,13 +697,29 @@ public class AVLTree {
 	    {
 	    	return this.height;
 	    }
-	    public void setRank(int rank)
+	    private void setRank(int rank)
 	    {
 	    	this.rank = rank;
 	    }
-	    public int getRank()
+	    private int getRank()
 	    {
 	    	return this.rank;
+	    }
+	    private void setRankDiffL(int rankDiffL)
+	    {
+	    	this.rankDiffL = rankDiffL;
+	    }
+	    private int getRankDiffL()
+	    {
+	    	return this.rankDiffL;
+	    }
+	    private void setRankDiffR(int rankDiffR)
+	    {
+	    	this.rankDiffR = rankDiffR;
+	    }
+	    private int getRankDiffR()
+	    {
+	    	return this.rankDiffR;
 	    }
   }
 
