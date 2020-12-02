@@ -139,6 +139,16 @@ public class AVLTree {
   }
   
   /**
+   * AVLNode rankDiff(AVLNode p, AVLNode c)
+   *
+   * The method gets a parent node and a child node.
+   * The method returns the rank differences between the two nodes.
+   */
+  private int rankDiff(AVLNode p, AVLNode c) {
+	  return p.getRank()-c.getRank();
+  }
+  
+  /**
    * private int promote(AVLNode n)
    *
    * The method gets a node and adds 1 to its rank.
@@ -165,7 +175,7 @@ public class AVLTree {
    *
    * The method gets a parent node and its son, whom between is the edge to rotate.
    * The method updates the relevant references and makes the relevant rank changes.
-   * The method returns 2 (one for rotation and one for demotion).
+   * The method returns 1 for rotation
    */  
   private int rightRotate(AVLNode z, AVLNode n) {
 	  AVLNode p = (AVLNode)z.getParent();
@@ -185,8 +195,7 @@ public class AVLTree {
 		  }
 	  else
 		  this.root = n;
-	  demote(z); // demoting z
-	  return 2; // one for rotating and one for demoting z
+	  return 1; // one for rotating
   }
   
   /**
@@ -194,7 +203,7 @@ public class AVLTree {
    *
    * The method gets a parent node and its son, whom between is the edge to rotate.
    * The method updates the relevant references and makes the relevant rank changes.
-   * The method returns 2 (one for rotation and one for demotion).
+   * The method returns 1 for rotation
    */
   private int leftRotate(AVLNode z, AVLNode n) {
 	  AVLNode p = (AVLNode)z.getParent();
@@ -214,8 +223,7 @@ public class AVLTree {
 	  }
 	  else
 		  this.root = n; // the new root
-	  demote(z); // demoting z
-	  return 2; // one for rotating and one for demoting z
+	  return 1; // one for rotating
   }
 
   /**
@@ -223,14 +231,13 @@ public class AVLTree {
    *
    * The method gets a parent node and its son, whom between is the first edge to rotate.
    * The method calls left rotation and then right rotation for the second edge to rotate.
-   * The method returns 5 (2 for rotations, 2 for demotions and 1 for promotion).
+   * The method returns 2 for rotations
    */  
   private int leftRightRotate(AVLNode z, AVLNode n) {
 	  int num = 0;
 	  num += leftRotate(z, n);
 	  num += rightRotate((AVLNode)n.getParent(), n);
-	  num += promote(n);
-	  return num; // 2 rotations, 2 demotions, 1 promotion
+	  return num; // 2 rotations
   }
 
   /**
@@ -238,14 +245,13 @@ public class AVLTree {
    *
    * The method gets a parent node and its son, whom between is the first edge to rotate.
    * The method calls right rotation and then left rotation for the second edge to rotate.
-   * The method returns 5 (2 for rotations, 2 for demotions and 1 for promotion).
+   * The method returns 2 for rotations
    */  
   private int rightLeftRotate(AVLNode z, AVLNode n) {
 	  int num = 0;
 	  num += rightRotate(z, n);
 	  num += leftRotate((AVLNode)n.getParent(), n);
-	  num += promote(n);
-	  return num; // 2 rotations, 2 demotions, 1 promotion
+	  return num; // 2 rotations
   }  
 
   /**
@@ -266,18 +272,20 @@ public class AVLTree {
 			  if (p.getLeft() == n) {
 				  if (rankDiff(n, (AVLNode)n.getLeft()) == 1 
 					&& rankDiff(n, (AVLNode)n.getRight()) == 2) // right rotation 
-						  return rightRotate(p, n);
+						  return rightRotate(p, n) + demote(p);
 				  else if (rankDiff(n, (AVLNode)n.getLeft()) == 2 
 					&& rankDiff(n, (AVLNode)n.getRight()) == 1) // leftRight rotation
-						  return leftRightRotate(n, (AVLNode)n.getRight());
+						  return leftRightRotate(n, (AVLNode)n.getRight()) 
+								  + demote(n) + demote(p) + promote((AVLNode)n.getRight());
 			  }
 			  else {
 				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
 					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) {// left rotation
-						  return leftRotate(p, n); }
+						  return leftRotate(p, n) + demote(p); }
 				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
 					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) // rightLeft rotation
-					      return rightLeftRotate(n, (AVLNode)n.getLeft());
+					      return rightLeftRotate(n, (AVLNode)n.getLeft())
+					    		  + demote(n) + demote(p) + promote((AVLNode)n.getLeft());
 			  }			  
 		  }
 	  }
@@ -386,8 +394,14 @@ public class AVLTree {
  	  if (rankDiff(p, leftChild) == 2 && rankDiff(p, rightChild) == 2) // rank differences 2,2
  			  return demote(p) + rebalanceDelete((AVLNode)p.getParent());
  	  else if (rankDiff(p, leftChild) == 3 && rankDiff(p, rightChild) == 1) {// rank differences 3,1
- 		  if (rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1 
- 				  && rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 1) 
+ 		  if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 1 // 1,1
+ 				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1) 
+ 			  return leftRotate(p, rightChild) + demote(p) + promote(rightChild);
+ 		  else if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 2 // 2,1
+				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1) 
+			  return leftRotate(p, rightChild) + demote(p) + demote(p) + rebalanceDelete((AVLNode)p.getParent());
+ 		  else return rightLeftRotate(p, leftChild)
+ 		  
  	  }
  	  
  		  else {
@@ -617,9 +631,7 @@ public class AVLTree {
 	  	private IAVLNode right; // a reference to the node's right son
 	  	private boolean isReal; // if the node is real or virtual 
 	  	private int height; // keeps the node's height in the tree
-	  	private int rank; // keeps the node's rank
-	  	private int rankDiffL; // keeps the node's rank difference with left child 
-	  	private int rankDiffR; // keeps the node's rank difference with right child 
+	  	private int rank; // keeps the node's rank 
 	  	
 	  	public AVLNode(int key, String info) 
 	  	{
@@ -629,16 +641,9 @@ public class AVLTree {
 	  			this.isReal = true;
 	  			this.setLeft(new AVLNode(-1, "")); // creates by default the left child as a virtual leaf
 	  			this.setRight(new AVLNode(-1, "")); // creates by default the right child as a virtual leaf
-	  			this.rank = 0;
-	  			this.rankDiffL = 1;
-	  			this.rankDiffR = 1;
 	  		}
-	  			else {
+	  			else
 	  				this.rank = -1;
-	  				this.rankDiffL = -1;
-	  				this.rankDiffR = -1;
-	  			}
-	  		
 	  		
 	  	}
 	  
@@ -687,29 +692,13 @@ public class AVLTree {
 	    {
 	    	return this.height;
 	    }
-	    private void setRank(int rank)
+	    public void setRank(int rank)
 	    {
 	    	this.rank = rank;
 	    }
-	    private int getRank()
+	    public int getRank()
 	    {
 	    	return this.rank;
-	    }
-	    private void setRankDiffL(int rankDiffL)
-	    {
-	    	this.rankDiffL = rankDiffL;
-	    }
-	    private int getRankDiffL()
-	    {
-	    	return this.rankDiffL;
-	    }
-	    private void setRankDiffR(int rankDiffR)
-	    {
-	    	this.rankDiffR = rankDiffR;
-	    }
-	    private int getRankDiffR()
-	    {
-	    	return this.rankDiffR;
 	    }
   }
 
