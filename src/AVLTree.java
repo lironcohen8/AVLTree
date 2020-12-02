@@ -442,8 +442,7 @@ public class AVLTree {
 	   
 	   deleteBST(n); // deleting n according to BST rules
 	   
-	   int num = rebalanceDelete(p); // rebalancing the tree
-	   return num; // return number of rebalancing operations
+	   return rebalanceDelete(p); // rebalancing the tree
    }
 
 
