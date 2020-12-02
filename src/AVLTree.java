@@ -400,28 +400,19 @@ public class AVLTree {
  		  else if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 2 // 2,1
 				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1) 
 			  return leftRotate(p, rightChild) + demote(p) + demote(p) + rebalanceDelete((AVLNode)p.getParent());
- 		  else return rightLeftRotate(p, leftChild)
- 		  
+ 		  else return rightLeftRotate(p, leftChild) // 1,2
+ 				  + demote(p) + demote(p) + demote((AVLNode)p.getRight()) + promote((AVLNode)p.getRight().getLeft()); 
  	  }
- 	  
- 		  else {
- 			  if (p.getLeft() == n) {
- 				  if (rankDiff(n, (AVLNode)n.getLeft()) == 1 
- 					&& rankDiff(n, (AVLNode)n.getRight()) == 2) // right rotation 
- 						  return rightRotate(p, n);
- 				  else if (rankDiff(n, (AVLNode)n.getLeft()) == 2 
- 					&& rankDiff(n, (AVLNode)n.getRight()) == 1) // leftRight rotation
- 						  return leftRightRotate(n, (AVLNode)n.getRight());
- 			  }
- 			  else {
- 				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
- 					&& rankDiff(n, (AVLNode)n.getLeft()) == 2) {// left rotation
- 						  return leftRotate(p, n); }
- 				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
- 					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) // rightLeft rotation
- 					      return rightLeftRotate(n, (AVLNode)n.getLeft());
- 			  }			  
- 		  }
+ 	 else if (rankDiff(p, leftChild) == 1 && rankDiff(p, rightChild) == 3) {// rank differences 1,3
+		  if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,1
+				  && rankDiff(leftChild, (AVLNode)rightChild.getRight()) == 1) 
+			  return rightRotate(p, leftChild) + demote(p) + promote(leftChild);
+		  else if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,2
+				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 2) 
+			  return rightRotate(p, leftChild) + demote(p) + demote(p) + rebalanceDelete((AVLNode)p.getParent());
+		  else return rightLeftRotate(p, leftChild) // 2,1
+				  + demote(p) + demote(p) + demote((AVLNode)p.getLeft()) + promote((AVLNode)p.getLeft().getRight()); 
+	  }
  	  return 0; // no rebalancing operation was taken
    }
 
