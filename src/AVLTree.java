@@ -322,8 +322,9 @@ public class AVLTree {
     *
     * deletes node from the AVL tree according to BST invariants.
     * The method doesn't rebalance the tree.
+    * The method returns the parent of the deleted node.
     */
-   private void deleteBST(AVLNode n) {
+   private AVLNode deleteBST(AVLNode n) {
  	AVLNode y = (AVLNode)n.getParent(); // return the parent of the node
  	if (n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) { // deleting a leaf
  		if (y.getLeft() == n) { // node is a left leaf
@@ -334,6 +335,7 @@ public class AVLTree {
  			y.setRight(n.getRight());
  			n.getRight().setParent(y);
  			}
+ 		return y;
  		}
  	else if (n.getLeft().getKey() == -1 || n.getRight().getKey() == -1) { // deleting an unary node
  			if (y.getLeft() == n) { // node is a left child
@@ -357,9 +359,11 @@ public class AVLTree {
  				}
  				
  			}
+ 			return y;
  		}
  	else { // deleting a node with two children
  		AVLNode m = successor(n);
+ 		AVLNode p = (AVLNode)m.getParent();
  		deleteBST(m); // deleting successor from tree
  		if (y != null) { // n is not the root
  			if (y.getLeft() == n) // adding successor instead of node
@@ -376,9 +380,10 @@ public class AVLTree {
  		m.setLeft(n.getLeft());
  		n.getRight().setParent(m);
  		m.setRight(n.getRight());
+ 		return p;
  		}
  	
- 	this.size--;
+ 	//this.size--;
    }
    
    
@@ -438,12 +443,7 @@ public class AVLTree {
 	   if (n.getKey() != k) // not in tree
 		   return -1;
 	   
-	   deleteBST(n); // deleting n according to BST rules
-	   
-	   AVLNode p = (AVLNode)n.getParent();
-	   if (p == null) {// deleted the root
-		   p = (AVLNode)this.getRoot();
-	   }
+	   AVLNode p = deleteBST(n); // deleting n according to BST rules
 	   return rebalanceDelete(p); // rebalancing the tree
    }
 
@@ -722,8 +722,8 @@ public static void main(String args[]) {
 		System.out.println("deleting 8:");
 		tree.delete(8);
 		tree.printTree();
-		System.out.println("deleting 3:");
-		tree.delete(3);
+		System.out.println("deleting 9:");
+		tree.delete(9);
 		tree.printTree();
 	}
 }
