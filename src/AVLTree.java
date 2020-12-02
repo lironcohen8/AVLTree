@@ -305,6 +305,7 @@ public class AVLTree {
 	   AVLNode n = new AVLNode(k, i);
 	   if (this.getRoot() == null) { // if the tree is empty
 		   this.root = n;
+		   //////////////size?
 		   return 0;
 	   }
 	   int num = insertBST(n); //inserting n according to BST rules
@@ -370,6 +371,7 @@ public class AVLTree {
  			this.root = m;
  		
  		m.setParent(y);
+ 		m.setRank(n.getRank());
  		n.getLeft().setParent(m);
  		m.setLeft(n.getLeft());
  		n.getRight().setParent(m);
@@ -388,6 +390,9 @@ public class AVLTree {
     * The method returns sum of rebalancing operations that were taken.
     */   
    private int rebalanceDelete(AVLNode p) {
+	  if (p == null) // finished bottom up rebalancing
+		  return 0;
+	  
 	  AVLNode leftChild = (AVLNode)p.getLeft();
 	  AVLNode rightChild = (AVLNode)p.getRight();
 	  
@@ -405,7 +410,7 @@ public class AVLTree {
  	  }
  	 else if (rankDiff(p, leftChild) == 1 && rankDiff(p, rightChild) == 3) {// rank differences 1,3
 		  if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,1
-				  && rankDiff(leftChild, (AVLNode)rightChild.getRight()) == 1) 
+				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 1) 
 			  return rightRotate(p, leftChild) + demote(p) + promote(leftChild);
 		  else if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,2
 				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 2) 
@@ -415,6 +420,7 @@ public class AVLTree {
 	  }
  	  return 0; // no rebalancing operation was taken
    }
+    
 
   /**
    * public int delete(int k)
@@ -430,18 +436,14 @@ public class AVLTree {
 	   AVLNode n = treePosition(k); // returns the wanted node
 	   
 	   if (n.getKey() != k) // not in tree
-		   return -1; 
-	   
-	   if (n.getParent() == null && n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) {// deleted the noly node in tree 
-		   this.root = null;
-		   return 0;
-	   }
-	   
-	   AVLNode p = (AVLNode)n.getParent();
-	   //deleted the root??
+		   return -1;
 	   
 	   deleteBST(n); // deleting n according to BST rules
 	   
+	   AVLNode p = (AVLNode)n.getParent();
+	   if (p == null) {// deleted the root
+		   p = (AVLNode)this.getRoot();
+	   }
 	   return rebalanceDelete(p); // rebalancing the tree
    }
 
@@ -709,7 +711,7 @@ public static void main(String args[]) {
 	}
 	else {
 		printableTree tree = new printableTree();
-		int[] arr = {4,8,9,10,3,2};
+		int[] arr = {8,4,9,3};
 		for (int val : arr) {
 			System.out.println("number is : " + val);
 			String info = Integer.toString(val);
@@ -717,10 +719,9 @@ public static void main(String args[]) {
 			tree.printTree();
 			System.out.println();
 			}
-		System.out.println("deleting 4:");
-		tree.delete(4);
+		System.out.println("deleting 8:");
+		tree.delete(8);
 		tree.printTree();
-		System.out.println();
 	}
 }
   
