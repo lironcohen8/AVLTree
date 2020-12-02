@@ -711,7 +711,7 @@ public static void main(String args[]) {
 	}
 	else {
 		printableTree tree = new printableTree();
-		int[] arr = {8,4,9,3,10,7,11,13};
+		int[] arr = {8,4,9,3,10,11,13};
 		for (int val : arr) {
 			System.out.println("number is : " + val);
 			String info = Integer.toString(val);
@@ -721,9 +721,6 @@ public static void main(String args[]) {
 			}
 		System.out.println("deleting 8:");
 		tree.delete(8);
-		tree.printTree();
-		System.out.println("deleting 7:");
-		tree.delete(7);
 		tree.printTree();
 		System.out.println("deleting 3:");
 		tree.delete(3);
