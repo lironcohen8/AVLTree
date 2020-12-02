@@ -139,16 +139,6 @@ public class AVLTree {
   }
   
   /**
-   * AVLNode rankDiff(AVLNode p, AVLNode c)
-   *
-   * The method gets a parent node and a child node.
-   * The method returns the rank differences between the two nodes.
-   */
-  private int rankDiff(AVLNode p, AVLNode c) {
-	  return p.getRank()-c.getRank();
-  }
-  
-  /**
    * private int promote(AVLNode n)
    *
    * The method gets a node and adds 1 to its rank.
