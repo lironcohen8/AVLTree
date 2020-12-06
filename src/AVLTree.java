@@ -575,6 +575,21 @@ public class AVLTree {
    {
 	   return null; 
    }
+   
+   
+   /**
+    * private AVLNode findRankEquiv(AVLTree tree, int rank)
+    *
+    * gets a tree and a rank returns the first left node whose rank is less or equals to given rank.
+    */
+   private AVLNode findRankEquiv(AVLTree tree, int rank) {
+	  AVLNode curr = (AVLNode)tree.getRoot();
+	  while (curr.getRank() > rank)
+		  curr = (AVLNode)curr.getLeft();
+	  return curr;
+   }
+   
+   
    /**
     * public join(IAVLNode x, AVLTree t)
     *
@@ -583,9 +598,64 @@ public class AVLTree {
 	  * precondition: keys(x,t) < keys() or keys(x,t) > keys(). t/tree might be empty (rank = -1).
     * postcondition: none
     */   
-   public int join(IAVLNode x, AVLTree t)
-   {
-	   return 0; 
+   public int join(IAVLNode x, AVLTree t) {
+	   AVLNode y = (AVLNode)x;
+	   int thisKey = this.getRoot().getKey();
+	   int otherKey = t.getRoot().getKey();
+	   AVLTree leftTree;
+	   AVLTree rightTree;
+	   
+	   if (otherKey < thisKey) {// joining from left side
+		   leftTree = t;
+		   rightTree = this;
+	   }
+	   else {// joining from right side
+		   leftTree = this;
+		   rightTree = t;
+	   }
+	   
+	   AVLNode leftRoot = (AVLNode)leftTree.getRoot();
+	   AVLNode rightRoot = (AVLNode)rightTree.getRoot();
+	   
+	   int leftRank = leftRoot.getRank();
+	   int rightRank = rightRoot.getRank(); 
+	   
+	   if (leftRank <= rightRank) {
+		   AVLNode b = findRankEquiv(rightTree, leftRank);
+		   y.setRank(leftRank + 1);
+		   
+		   AVLNode c = (AVLNode)b.getParent();
+		   y.setParent(c);
+		   c.setRight(y);
+		   
+		   y.setRight(b);
+		   b.setParent(y);
+		   
+		   y.setLeft(leftRoot);
+		   leftRoot.setParent(y);
+		   
+		   this.root = c;
+		   rebalanceInsert(y);
+	   }
+	   
+	   else {
+		   AVLNode b = findRankEquiv(leftTree, rightRank);
+		   y.setRank(rightRank + 1);
+		   
+		   AVLNode c = (AVLNode)b.getParent();
+		   y.setParent(c);
+		   c.setLeft(y);
+		   
+		   y.setLeft(b);
+		   b.setParent(y);
+		   
+		   y.setRight(rightRoot);
+		   rightRoot.setParent(y);
+		   
+		   this.root = c;
+		   rebalanceInsert(y);
+	   }
+	  return Math.abs(leftRank - rightRank) + 1;
    }
 
 	/**
@@ -695,7 +765,7 @@ public class AVLTree {
   }
 
 public static void main(String args[]) {
-	boolean isRand = false;
+	/*boolean isRand = false;
 	if (isRand) {
 		int n = 50;
 		printableTree tree = new printableTree();
@@ -725,9 +795,39 @@ public static void main(String args[]) {
 		System.out.println("deleting 9:");
 		tree.delete(9);
 		tree.printTree();
+	} */
+	
+	boolean join = true;
+	if (join) {
+		printableTree tree = new printableTree();
+		int[] arr = {2,1,3};
+		for (int val : arr) {
+			//System.out.println("number is : " + val);
+			String info = Integer.toString(val);
+			tree.insert(val, info);
+			//tree.printTree();
+			//System.out.println();
+			}
+		tree.printTree();
+			
+		printableTree tree2 = new printableTree();
+			int[] arr2 = {8,6,10,4,7,9,11};
+			for (int val2 : arr2) {
+				//System.out.println("number is : " + val2);
+				String info2 = Integer.toString(val2);
+				tree2.insert(val2, info2);
+				//tree2.printTree();
+				//System.out.println();		
+			}
+			tree2.printTree();
+			
+			AVLNode x = new AVLNode(5,"5");
+			tree.join(x, (AVLTree)tree2);
+			
 	}
-}
   
 }
+}
+
   
 
