@@ -614,10 +614,13 @@ public class AVLTree {
     * postcondition: none
     */   
    public int join(IAVLNode x, AVLTree t) {
-	   if (t.getRoot() == null) {
+	   if (t.getRoot() == null && this.getRoot() == null) { // both trees are empty
 		   this.insert(x.getKey(), x.getValue());
 	   }
-	   else if (this.getRoot() == null) {
+	   if (t.getRoot() == null) { // t is empty
+		   this.insert(x.getKey(), x.getValue());
+	   }
+	   else if (this.getRoot() == null) { // this tree if empty
 		   t.insert(x.getKey(), x.getValue());
 		   this.root = t.root;
 	   }
@@ -659,7 +662,7 @@ public class AVLTree {
 			   leftRoot.setParent(y);
 			   
 			   this.root = c;
-			   //rebalanceInsert(y);
+			   rebalanceInsert(y);
 		   }
 		   
 		   else {
@@ -677,7 +680,7 @@ public class AVLTree {
 			   rightRoot.setParent(y);
 			   
 			   this.root = c;
-			   //rebalanceInsert(y);
+			   rebalanceInsert(y);
 		   }
 	   }
 	  return Math.abs(this.getRank() - t.getRank()) + 1;
