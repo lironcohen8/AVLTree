@@ -661,7 +661,7 @@ public class AVLTree {
 			   y.setLeft(leftRoot);
 			   leftRoot.setParent(y);
 			   
-			   this.root = c;
+			   this.root = rightRoot;
 			   rebalanceInsert(y);
 		   }
 		   
@@ -679,7 +679,7 @@ public class AVLTree {
 			   y.setRight(rightRoot);
 			   rightRoot.setParent(y);
 			   
-			   this.root = c;
+			   this.root = leftRoot;
 			   rebalanceInsert(y);
 		   }
 	   }
