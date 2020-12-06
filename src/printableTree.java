@@ -7,6 +7,8 @@ public class printableTree extends AVLTree {
 
     public void printTree() {
         IAVLNode root = this.getRoot();
+        if (root != null) {
+        	
         List<List<String>> lines = new ArrayList<List<String>>();
 
         List<IAVLNode> level = new ArrayList<IAVLNode>();
@@ -109,6 +111,7 @@ public class printableTree extends AVLTree {
             System.out.println();
 
             perpiece /= 2;
+        }
         }
     }
 
