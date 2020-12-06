@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
@@ -99,7 +100,6 @@ public class AVLTree {
 	else if (n.getKey() > y.getKey()) { // set as the right child
 		y.setRight(n);
 	}
-	this.size++;
 	return 1;
   }
 
@@ -305,7 +305,7 @@ public class AVLTree {
 	   AVLNode n = new AVLNode(k, i);
 	   if (this.getRoot() == null) { // if the tree is empty
 		   this.root = n;
-		   //////////////size?
+		   this.size++;
 		   return 0;
 	   }
 	   int num = insertBST(n); //inserting n according to BST rules
@@ -314,6 +314,7 @@ public class AVLTree {
 	   else {
 		   num = rebalanceInsert(n); // rebalancing the tree
 	   }
+	   this.size++;
 	   return num; // return number of rebalancing operations
    }
 
@@ -382,8 +383,6 @@ public class AVLTree {
  		m.setRight(n.getRight());
  		return p;
  		}
- 	
- 	//this.size--;
    }
    
    
@@ -443,6 +442,7 @@ public class AVLTree {
 	   if (n.getKey() != k) // not in tree
 		   return -1;
 	   
+	   this.size--;
 	   AVLNode p = deleteBST(n); // deleting n according to BST rules
 	   return rebalanceDelete(p); // rebalancing the tree
    }
@@ -491,7 +491,7 @@ public class AVLTree {
 	   IAVLNode[] arr = new IAVLNode[this.size]; // creating the keys array that we will return
 	   int index = 0; // index of the cur node in array
 	   IAVLNode cur = this.root; // starting from root
-	   while (cur.getKey() != -1 || s.peek() != null) { // until cur is a virtual leaf or the stack is empty
+	   while (cur.getKey() != -1 || !s.isEmpty()) { // until cur is a virtual leaf or the stack is empty
 		   if (cur.getKey() != -1) {
 			   s.push(cur); 
 			   cur = cur.getLeft();
@@ -793,7 +793,7 @@ public class AVLTree {
   }
 
 public static void main(String args[]) {
-	/*boolean isRand = false;
+	boolean isRand = false;
 	if (isRand) {
 		int n = 50;
 		printableTree tree = new printableTree();
@@ -817,15 +817,17 @@ public static void main(String args[]) {
 			tree.printTree();
 			System.out.println();
 			}
-		System.out.println("deleting 8:");
+		/*System.out.println("deleting 8:");
 		tree.delete(8);
 		tree.printTree();
 		System.out.println("deleting 9:");
 		tree.delete(9);
-		tree.printTree();
-	} */
+		tree.printTree();*/
+		int[] array = tree.keysToArray();
+		System.out.println(Arrays.toString(array));
+	}
 	
-	boolean join = true;
+	boolean join = false;
 	if (join) {
 		printableTree tree = new printableTree();
 		int[] arr = {1};
@@ -858,6 +860,8 @@ public static void main(String args[]) {
 			
 			tree2.printTree();
 	}
+	
+	
   
 }
 }
