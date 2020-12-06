@@ -626,7 +626,7 @@ public class AVLTree {
 		   
 		   AVLNode c = (AVLNode)b.getParent();
 		   y.setParent(c);
-		   c.setRight(y);
+		   c.setLeft(y);
 		   
 		   y.setRight(b);
 		   b.setParent(y);
@@ -635,7 +635,7 @@ public class AVLTree {
 		   leftRoot.setParent(y);
 		   
 		   this.root = c;
-		   rebalanceInsert(y);
+		   //rebalanceInsert(y);
 	   }
 	   
 	   else {
@@ -644,7 +644,7 @@ public class AVLTree {
 		   
 		   AVLNode c = (AVLNode)b.getParent();
 		   y.setParent(c);
-		   c.setLeft(y);
+		   c.setRight(y);
 		   
 		   y.setLeft(b);
 		   b.setParent(y);
@@ -653,7 +653,7 @@ public class AVLTree {
 		   rightRoot.setParent(y);
 		   
 		   this.root = c;
-		   rebalanceInsert(y);
+		   //rebalanceInsert(y);
 	   }
 	  return Math.abs(leftRank - rightRank) + 1;
    }
@@ -808,10 +808,11 @@ public static void main(String args[]) {
 			//tree.printTree();
 			//System.out.println();
 			}
+		System.out.println();
 		tree.printTree();
 			
 		printableTree tree2 = new printableTree();
-			int[] arr2 = {8,6,10,4,7,9,11};
+			int[] arr2 = {8,6,10,4,7,9,11,12,13,14,15};
 			for (int val2 : arr2) {
 				//System.out.println("number is : " + val2);
 				String info2 = Integer.toString(val2);
@@ -819,11 +820,15 @@ public static void main(String args[]) {
 				//tree2.printTree();
 				//System.out.println();		
 			}
+			System.out.println();
 			tree2.printTree();
 			
-			AVLNode x = new AVLNode(5,"5");
-			tree.join(x, (AVLTree)tree2);
+			AVLTree dummy = new AVLTree();
+			dummy.insert(5, "5");
+			AVLTree tree2new = (AVLTree)tree2;
+			tree2new.join(dummy.getRoot(), (AVLTree)tree);
 			
+			tree2.printTree();
 	}
   
 }
