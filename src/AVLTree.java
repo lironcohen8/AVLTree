@@ -563,6 +563,21 @@ public class AVLTree {
    {
 	   return this.root;
    }
+   
+   /**
+    * public int getRank()
+    *
+    * Returns the rank of the tree.
+    */
+   public int getRank()
+   {
+	   if (this.root == null)
+		   return -1;
+	   else
+		   return ((AVLNode)this.root).getRank();
+   }
+   
+   
      /**
     * public string split(int x)
     *
@@ -599,63 +614,73 @@ public class AVLTree {
     * postcondition: none
     */   
    public int join(IAVLNode x, AVLTree t) {
-	   AVLNode y = (AVLNode)x;
-	   int thisKey = this.getRoot().getKey();
-	   int otherKey = t.getRoot().getKey();
-	   AVLTree leftTree;
-	   AVLTree rightTree;
-	   
-	   if (otherKey < thisKey) {// joining from left side
-		   leftTree = t;
-		   rightTree = this;
+	   if (t.getRoot() == null) {
+		   this.insert(x.getKey(), x.getValue());
 	   }
-	   else {// joining from right side
-		   leftTree = this;
-		   rightTree = t;
+	   else if (this.getRoot() == null) {
+		   t.insert(x.getKey(), x.getValue());
+		   this.root = t.root;
 	   }
 	   
-	   AVLNode leftRoot = (AVLNode)leftTree.getRoot();
-	   AVLNode rightRoot = (AVLNode)rightTree.getRoot();
-	   
-	   int leftRank = leftRoot.getRank();
-	   int rightRank = rightRoot.getRank(); 
-	   
-	   if (leftRank <= rightRank) {
-		   AVLNode b = findRankEquiv(rightTree, leftRank);
-		   y.setRank(leftRank + 1);
+	   else { // none of the trees are empty
+ 		   AVLNode y = (AVLNode)x;
+		   int thisKey = this.getRoot().getKey();
+		   int otherKey = t.getRoot().getKey();
+		   AVLTree leftTree;
+		   AVLTree rightTree;
 		   
-		   AVLNode c = (AVLNode)b.getParent();
-		   y.setParent(c);
-		   c.setLeft(y);
+		   if (otherKey < thisKey) {// joining from left side
+			   leftTree = t;
+			   rightTree = this;
+		   }
+		   else {// joining from right side
+			   leftTree = this;
+			   rightTree = t;
+		   }
 		   
-		   y.setRight(b);
-		   b.setParent(y);
+		   AVLNode leftRoot = (AVLNode)leftTree.getRoot();
+		   AVLNode rightRoot = (AVLNode)rightTree.getRoot();
 		   
-		   y.setLeft(leftRoot);
-		   leftRoot.setParent(y);
+		   int leftRank = leftRoot.getRank();
+		   int rightRank = rightRoot.getRank(); 
 		   
-		   this.root = c;
-		   //rebalanceInsert(y);
+		   if (leftRank <= rightRank) {
+			   AVLNode b = findRankEquiv(rightTree, leftRank);
+			   y.setRank(leftRank + 1);
+			   
+			   AVLNode c = (AVLNode)b.getParent();
+			   y.setParent(c);
+			   c.setLeft(y);
+			   
+			   y.setRight(b);
+			   b.setParent(y);
+			   
+			   y.setLeft(leftRoot);
+			   leftRoot.setParent(y);
+			   
+			   this.root = c;
+			   //rebalanceInsert(y);
+		   }
+		   
+		   else {
+			   AVLNode b = findRankEquiv(leftTree, rightRank);
+			   y.setRank(rightRank + 1);
+			   
+			   AVLNode c = (AVLNode)b.getParent();
+			   y.setParent(c);
+			   c.setRight(y);
+			   
+			   y.setLeft(b);
+			   b.setParent(y);
+			   
+			   y.setRight(rightRoot);
+			   rightRoot.setParent(y);
+			   
+			   this.root = c;
+			   //rebalanceInsert(y);
+		   }
 	   }
-	   
-	   else {
-		   AVLNode b = findRankEquiv(leftTree, rightRank);
-		   y.setRank(rightRank + 1);
-		   
-		   AVLNode c = (AVLNode)b.getParent();
-		   y.setParent(c);
-		   c.setRight(y);
-		   
-		   y.setLeft(b);
-		   b.setParent(y);
-		   
-		   y.setRight(rightRoot);
-		   rightRoot.setParent(y);
-		   
-		   this.root = c;
-		   //rebalanceInsert(y);
-	   }
-	  return Math.abs(leftRank - rightRank) + 1;
+	  return Math.abs(this.getRank() - t.getRank()) + 1;
    }
 
 	/**
@@ -800,7 +825,7 @@ public static void main(String args[]) {
 	boolean join = true;
 	if (join) {
 		printableTree tree = new printableTree();
-		int[] arr = {2,1,3};
+		int[] arr = {1};
 		for (int val : arr) {
 			//System.out.println("number is : " + val);
 			String info = Integer.toString(val);
@@ -812,7 +837,7 @@ public static void main(String args[]) {
 		tree.printTree();
 			
 		printableTree tree2 = new printableTree();
-			int[] arr2 = {8,6,10,4,7,9,11,12,13,14,15};
+			int[] arr2 = {3,4,5,6,7,8,9};
 			for (int val2 : arr2) {
 				//System.out.println("number is : " + val2);
 				String info2 = Integer.toString(val2);
@@ -824,7 +849,7 @@ public static void main(String args[]) {
 			tree2.printTree();
 			
 			AVLTree dummy = new AVLTree();
-			dummy.insert(5, "5");
+			dummy.insert(2, "2");
 			AVLTree tree2new = (AVLTree)tree2;
 			tree2new.join(dummy.getRoot(), (AVLTree)tree);
 			
