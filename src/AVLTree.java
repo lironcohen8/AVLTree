@@ -608,8 +608,10 @@ public class AVLTree {
 	   AVLTree temp = new AVLTree();
 	   
 	   AVLNode n = treePosition(x); // finding x's node
-	   T1.root = n.getLeft(); // Initialising the smaller tree
-	   T2.root = n.getRight(); // Initialising the bigger tree
+	   if (n.getLeft().getKey() != -1)
+		   T1.root = n.getLeft(); // Initialising the smaller tree-
+	   if (n.getRight().getKey() != -1)
+		   T2.root = n.getRight(); // Initialising the bigger tree
 	   
 	   AVLNode cur = n;
 	   while (cur != this.root) {
