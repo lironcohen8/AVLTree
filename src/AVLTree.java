@@ -625,8 +625,8 @@ public class AVLTree {
 		   }
 		   cur = (AVLNode)cur.getParent();
 	   }
-	   T1.rebalanceInsert((AVLNode)n.getLeft());
-	   T2.rebalanceInsert((AVLNode)n.getRight());
+	   //T1.rebalanceInsert((AVLNode)n.getLeft());
+	   //T2.rebalanceInsert((AVLNode)n.getRight());
 	   AVLTree[] result = {T1,T2}; 
 	   return result;
    }
