@@ -594,7 +594,9 @@ public class AVLTree {
 	   
 	   AVLNode n = treePosition(x); // finding x's node
 	   T1.root = n.getLeft(); // Initialising the smaller tree
+	   T1.size = ((AVLNode)n.getLeft()).getRank();
 	   T2.root = n.getRight(); // Initialising the bigger tree
+	   T2.size = ((AVLNode)n.getRight()).getRank();
 	   
 	   AVLNode cur = n;
 	   while (cur != this.root) {
@@ -743,7 +745,8 @@ public class AVLTree {
 	  	private IAVLNode right; // a reference to the node's right son
 	  	private boolean isReal; // if the node is real or virtual 
 	  	private int height; // keeps the node's height in the tree
-	  	private int rank; // keeps the node's rank 
+	  	private int rank; // keeps the node's rank
+	  	private int size; // keeps the node's subtree size
 	  	
 	  	public AVLNode(int key, String info) 
 	  	{
@@ -753,6 +756,7 @@ public class AVLTree {
 	  			this.isReal = true;
 	  			this.setLeft(new AVLNode(-1, "")); // creates by default the left child as a virtual leaf
 	  			this.setRight(new AVLNode(-1, "")); // creates by default the right child as a virtual leaf
+	  			this.size = 1;
 	  		}
 	  			else
 	  				this.rank = -1;
@@ -812,6 +816,14 @@ public class AVLTree {
 	    {
 	    	return this.rank;
 	    }
+	    public void setSize(int size)
+	    {
+	    	this.size = size;
+	    }
+	    public int getSize()
+	    {
+	    	return this.size;
+	    }
   }
 
 public static void main(String args[]) {
@@ -850,7 +862,7 @@ public static void main(String args[]) {
 		System.out.println(Arrays.toString(array));
 	}
 	
-	boolean join = true;
+	boolean join = false;
 	if (join) {
 		printableTree tree = new printableTree();
 		int[] arr = {1};
@@ -882,6 +894,27 @@ public static void main(String args[]) {
 			tree2new.join(dummy.getRoot(), (AVLTree)tree);
 			
 			tree2.printTree();
+	}
+	
+	boolean split = true;
+	if (split) {
+		printableTree tree2 = new printableTree();
+		int[] arr2 = {3,4,5,6,7,8,9};
+		for (int val2 : arr2) {
+			//System.out.println("number is : " + val2);
+			String info2 = Integer.toString(val2);
+			tree2.insert(val2, info2);
+			//tree2.printTree();
+			//System.out.println();		
+		}
+		System.out.println();
+		tree2.printTree();
+		
+		AVLTree[] arr = tree2.split(4);
+		printableTree t1 = (printableTree)arr[0];
+		t1.printTree();
+		printableTree t2 = (printableTree)arr[1];
+		t2.printTree();
 	}
 	
 	
