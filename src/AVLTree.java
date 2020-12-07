@@ -931,11 +931,10 @@ public static void main(String args[]) {
 		System.out.println();
 		tree2.printTree();
 		
-		AVLTree[] arr = tree2.split(5);
-		printableTree t1 = (printableTree)arr[0];
-		t1.printTree();
-		printableTree t2 = (printableTree)arr[1];
-		t2.printTree();
+		AVLTree[] arr = tree2.split(6);
+		System.out.println(arr[0].size());
+		System.out.println(Arrays.toString(arr[0].keysToArray()));
+		System.out.println(Arrays.toString(arr[1].keysToArray()));
 	}
 	
 	
