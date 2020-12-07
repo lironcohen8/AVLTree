@@ -588,7 +588,29 @@ public class AVLTree {
     */   
    public AVLTree[] split(int x)
    {
-	   return null; 
+	   AVLTree T1 = new AVLTree(); // tree with smaller keys
+	   AVLTree T2 = new AVLTree(); // tree with bigger keys
+	   AVLTree temp = new AVLTree();
+	   
+	   AVLNode n = treePosition(x); // finding x's node
+	   T1.root = n.getLeft(); // Initialising the smaller tree
+	   T2.root = n.getRight(); // Initialising the bigger tree
+	   
+	   AVLNode cur = n;
+	   while (cur != this.root) {
+		   if (cur.getParent().getRight() == cur) {// if cur is a right child			   
+			   temp.root = cur.getParent().getLeft();
+			   T1.join(cur.getParent(), temp);
+		   }
+		   else { // if cur is a left child
+			   temp.root = cur.getParent().getRight();
+			   T2.join(cur.getParent(), temp);
+		   }
+		   cur = (AVLNode)cur.getParent();
+	   }
+	 
+	   AVLTree[] result = {T1,T2}; 
+	   return result;
    }
    
    
