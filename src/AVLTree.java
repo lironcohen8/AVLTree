@@ -623,7 +623,8 @@ public class AVLTree {
 		   }
 		   cur = (AVLNode)cur.getParent();
 	   }
-	 
+	   T1.rebalanceInsert((AVLNode)n.getLeft());
+	   T2.rebalanceInsert((AVLNode)n.getRight());
 	   AVLTree[] result = {T1,T2}; 
 	   return result;
    }
@@ -699,6 +700,7 @@ public class AVLTree {
 			   leftRoot.setParent(y);
 			   
 			   this.root = rightRoot;
+			   this.root.setParent(null);
 			   rebalanceInsert(y);
 		   }
 		   
@@ -717,6 +719,7 @@ public class AVLTree {
 			   rightRoot.setParent(y);
 			   
 			   this.root = leftRoot;
+			   this.root.setParent(null);
 			   rebalanceInsert(y);
 		   }
 	   }
@@ -926,7 +929,7 @@ public static void main(String args[]) {
 		System.out.println();
 		tree2.printTree();
 		
-		AVLTree[] arr = tree2.split(4);
+		AVLTree[] arr = tree2.split(5);
 		printableTree t1 = (printableTree)arr[0];
 		t1.printTree();
 		printableTree t2 = (printableTree)arr[1];
