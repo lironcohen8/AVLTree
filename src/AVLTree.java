@@ -157,6 +157,7 @@ public class AVLTree {
 		  AVLNode curLeft = (AVLNode)cur.getLeft();
 		  AVLNode curRight = (AVLNode)cur.getRight();
 		  cur.setSize(curLeft.getSize()+curRight.getSize()+1);
+		  cur = (AVLNode)cur.getParent();
 	  }
   }
   
@@ -936,6 +937,3 @@ public static void main(String args[]) {
   
 }
 }
-
-  
-
