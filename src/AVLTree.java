@@ -149,6 +149,21 @@ public class AVLTree {
   }
   
   /**
+   * private void updateSize(AVLNode n)
+   *
+   * The method gets a node and updates its and all its parents' size attribute. 
+   */
+  private void updateSize(AVLNode n) {
+	  AVLNode cur = n;
+	  while (cur.getParent() != null) {
+		  AVLNode curLeft = (AVLNode)cur.getLeft();
+		  AVLNode curRight = (AVLNode)cur.getRight();
+		  cur.setSize(curLeft.getSize()+curRight.getSize()+1);
+	  }
+  }
+  
+  
+  /**
    * private int promote(AVLNode n)
    *
    * The method gets a node and adds 1 to its rank.
@@ -758,8 +773,10 @@ public class AVLTree {
 	  			this.setRight(new AVLNode(-1, "")); // creates by default the right child as a virtual leaf
 	  			this.size = 1;
 	  		}
-	  			else
+	  			else {
 	  				this.rank = -1;
+	  				this.size = 0;
+	  			}
 	  		
 	  	}
 	  
