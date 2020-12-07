@@ -320,6 +320,7 @@ public class AVLTree {
 	   AVLNode n = new AVLNode(k, i);
 	   if (this.getRoot() == null) { // if the tree is empty
 		   this.root = n;
+		   updateSize(n); // updating the size attribute of the relevant nodes
 		   this.size++;
 		   return 0;
 	   }
@@ -330,6 +331,7 @@ public class AVLTree {
 		   num = rebalanceInsert(n); // rebalancing the tree
 	   }
 	   this.size++;
+	   updateSize(n); // updating the size attribute of the relevant nodes
 	   return num; // return number of rebalancing operations
    }
 
@@ -459,7 +461,9 @@ public class AVLTree {
 	   
 	   this.size--;
 	   AVLNode p = deleteBST(n); // deleting n according to BST rules
-	   return rebalanceDelete(p); // rebalancing the tree
+	   int result = rebalanceDelete(p); // rebalancing the tree 
+	   updateSize(n); // updating the size attribute of the relevant nodes
+	   return result; 
    }
 
 
