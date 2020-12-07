@@ -13,7 +13,6 @@ import java.util.Stack;
 
 public class AVLTree {
 	private IAVLNode root;
-	private int size;
 
 	
   /**
@@ -24,7 +23,6 @@ public class AVLTree {
    */
   public AVLTree() {
 	  this.root = null;
-	  this.size = 0;
   }
 	
 	
@@ -321,7 +319,6 @@ public class AVLTree {
 	   if (this.getRoot() == null) { // if the tree is empty
 		   this.root = n;
 		   updateSize(n); // updating the size attribute of the relevant nodes
-		   this.size++;
 		   return 0;
 	   }
 	   int num = insertBST(n); //inserting n according to BST rules
@@ -330,7 +327,6 @@ public class AVLTree {
 	   else {
 		   num = rebalanceInsert(n); // rebalancing the tree
 	   }
-	   this.size++;
 	   updateSize(n); // updating the size attribute of the relevant nodes
 	   return num; // return number of rebalancing operations
    }
@@ -459,7 +455,6 @@ public class AVLTree {
 	   if (n.getKey() != k) // not in tree
 		   return -1;
 	   
-	   this.size--;
 	   AVLNode p = deleteBST(n); // deleting n according to BST rules
 	   int result = rebalanceDelete(p); // rebalancing the tree 
 	   updateSize(n); // updating the size attribute of the relevant nodes
@@ -507,7 +502,7 @@ public class AVLTree {
    private IAVLNode[] nodesToArray()
    {
 	   Stack<IAVLNode> s = new Stack<IAVLNode>(); // creating a stack to hold keys that we saw but didn't add to the array
-	   IAVLNode[] arr = new IAVLNode[this.size]; // creating the keys array that we will return
+	   IAVLNode[] arr = new IAVLNode[this.size()]; // creating the keys array that we will return
 	   int index = 0; // index of the cur node in array
 	   IAVLNode cur = this.root; // starting from root
 	   while (cur.getKey() != -1 || !s.isEmpty()) { // until cur is a virtual leaf or the stack is empty
@@ -535,7 +530,7 @@ public class AVLTree {
   public int[] keysToArray()
   {
 	  IAVLNode[] nodesArr = nodesToArray();
-	  int[] arr = new int[this.size];
+	  int[] arr = new int[this.size()];
 	  for (int i=0; i<arr.length; i++)
 		  arr[i] = nodesArr[i].getKey();
 	  return arr;
@@ -551,7 +546,7 @@ public class AVLTree {
   public String[] infoToArray()
   {
 	  IAVLNode[] nodesArr = nodesToArray();
-	  String[] arr = new String[this.size];
+	  String[] arr = new String[this.size()];
 	  for (int i=0; i<arr.length; i++)
 		  arr[i] = nodesArr[i].getValue();
 	  return arr;
@@ -567,7 +562,7 @@ public class AVLTree {
     */
    public int size()
    {
-	   return this.size;
+	   return ((AVLNode)this.root).getSize();
    }
    
      /**
@@ -613,9 +608,7 @@ public class AVLTree {
 	   
 	   AVLNode n = treePosition(x); // finding x's node
 	   T1.root = n.getLeft(); // Initialising the smaller tree
-	   T1.size = ((AVLNode)n.getLeft()).getRank();
 	   T2.root = n.getRight(); // Initialising the bigger tree
-	   T2.size = ((AVLNode)n.getRight()).getRank();
 	   
 	   AVLNode cur = n;
 	   while (cur != this.root) {
@@ -726,6 +719,7 @@ public class AVLTree {
 			   rebalanceInsert(y);
 		   }
 	   }
+	  updateSize((AVLNode)x); //updating the size attribute of the relevant nodes; 
 	  return Math.abs(this.getRank() - t.getRank()) + 1;
    }
 
