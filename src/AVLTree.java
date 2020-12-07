@@ -153,7 +153,7 @@ public class AVLTree {
    */
   private void updateSize(AVLNode n) {
 	  AVLNode cur = n;
-	  while (cur.getParent() != null) {
+	  while (cur != null) {
 		  AVLNode curLeft = (AVLNode)cur.getLeft();
 		  AVLNode curRight = (AVLNode)cur.getRight();
 		  cur.setSize(curLeft.getSize()+curRight.getSize()+1);
@@ -936,6 +936,8 @@ public static void main(String args[]) {
 		System.out.println(Arrays.toString(arr[0].keysToArray()));
 		System.out.println(Arrays.toString(arr[1].keysToArray()));
 	}
+	
+	
 	
 	
   
