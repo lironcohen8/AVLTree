@@ -794,6 +794,7 @@ public class AVLTree {
 
 public static void main(String args[]) {
 	boolean isRand = false;
+	boolean insert = false;
 	if (isRand) {
 		int n = 50;
 		printableTree tree = new printableTree();
@@ -807,15 +808,15 @@ public static void main(String args[]) {
 			System.out.println();
 			}
 	}
-	else {
+	else if (insert) {
 		printableTree tree = new printableTree();
 		int[] arr = {8,4,9,3,10,11,13};
 		for (int val : arr) {
-			System.out.println("number is : " + val);
+			//System.out.println("number is : " + val);
 			String info = Integer.toString(val);
 			tree.insert(val, info);
 			tree.printTree();
-			System.out.println();
+			//System.out.println();
 			}
 		/*System.out.println("deleting 8:");
 		tree.delete(8);
@@ -823,11 +824,11 @@ public static void main(String args[]) {
 		System.out.println("deleting 9:");
 		tree.delete(9);
 		tree.printTree();*/
-		int[] array = tree.keysToArray();
+		String[] array = tree.infoToArray();
 		System.out.println(Arrays.toString(array));
 	}
 	
-	boolean join = false;
+	boolean join = true;
 	if (join) {
 		printableTree tree = new printableTree();
 		int[] arr = {1};
