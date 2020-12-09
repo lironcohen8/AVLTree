@@ -46,6 +46,9 @@ public class AVLTree {
   public String search(int k)
   {
 	IAVLNode node = this.root;
+	if (node == null) {
+		return null;
+	}
 	while (node.getKey() != -1) {
 		if (k == node.getKey()) // if the key is found
 			return node.getValue(); 
@@ -192,6 +195,9 @@ public class AVLTree {
    * The method returns 1 for rotation
    */  
   private int rightRotate(AVLNode z, AVLNode n) {
+	  if(z == null) 
+		  return 0;
+	  
 	  AVLNode p = (AVLNode)z.getParent();
 	  
 	  z.setLeft(n.getRight()); 
@@ -344,7 +350,11 @@ public class AVLTree {
    private AVLNode deleteBST(AVLNode n) {
  	AVLNode y = (AVLNode)n.getParent(); // return the parent of the node
  	if (n.getLeft().getKey() == -1 && n.getRight().getKey() == -1) { // deleting a leaf
- 		if (y.getLeft() == n) { // node is a left leaf
+ 		if(this.root == n) { //deleting a leaf wich is the root
+ 			this.root =null;
+ 			return null;
+ 		}
+ 		else if (y.getLeft() == n) { // node is a left leaf
  			y.setLeft(n.getLeft());
  			n.getLeft().setParent(y);
  			}
@@ -354,7 +364,7 @@ public class AVLTree {
  			}
  		return y;
  		}
- 	else if (n.getLeft().getKey() == -1 || n.getRight().getKey() == -1) { // deleting an unary node
+ 	else if (this.root != n && (n.getLeft().getKey() == -1 || n.getRight().getKey() == -1)) { // deleting an unary node which is not the root
  			if (y.getLeft() == n) { // node is a left child
  				if (n.getLeft().getKey() == -1) {// wants to replace with right child
  					y.setLeft(n.getRight());
@@ -453,6 +463,9 @@ public class AVLTree {
    */
    public int delete(int k)
    {
+	   if(this.root == null) {
+		   return -1;
+	   }
 	   AVLNode n = treePosition(k); // returns the wanted node
 	   
 	   if (n.getKey() != k) // not in tree
@@ -474,6 +487,8 @@ public class AVLTree {
    public String min()
    {
 	   IAVLNode node = this.root;
+	   if (node == null)
+		   return null;
 	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
 		   node = node.getLeft();
 	   }
@@ -489,6 +504,8 @@ public class AVLTree {
    public String max()
    {
 	   IAVLNode node = this.root;
+	   if (node == null)
+		   return null;
 	   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
 		   node = node.getRight();
 	   }
@@ -506,6 +523,8 @@ public class AVLTree {
    {
 	   Stack<IAVLNode> s = new Stack<IAVLNode>(); // creating a stack to hold keys that we saw but didn't add to the array
 	   IAVLNode[] arr = new IAVLNode[this.size()]; // creating the keys array that we will return
+	   if(this.size() == 0) // tree is empty
+		   return arr;
 	   int index = 0; // index of the cur node in array
 	   IAVLNode cur = this.root; // starting from root
 	   while (cur.getKey() != -1 || !s.isEmpty()) { // until cur is a virtual leaf or the stack is empty
@@ -565,6 +584,8 @@ public class AVLTree {
     */
    public int size()
    {
+	   if(this.root == null) 
+		   return 0;
 	   return ((AVLNode)this.root).getSize();
    }
    
