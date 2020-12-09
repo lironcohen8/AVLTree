@@ -209,6 +209,7 @@ public class AVLTree {
 		  }
 	  else
 		  this.root = n;
+	  updateSize(z);
 	  return 1; // one for rotating
   }
   
@@ -237,6 +238,7 @@ public class AVLTree {
 	  }
 	  else
 		  this.root = n; // the new root
+	  updateSize(z);
 	  return 1; // one for rotating
   }
 
@@ -637,10 +639,18 @@ public class AVLTree {
     *
     * gets a tree and a rank returns the first left node whose rank is less or equals to given rank.
     */
-   private AVLNode findRankEquiv(AVLTree tree, int rank) {
-	  AVLNode curr = (AVLNode)tree.getRoot();
+   private AVLNode findRankEquiv(AVLTree tree, int rank, char D ) {
+	  AVLNode curr;
+	  if (D == 'l') {
+	  curr = (AVLNode)tree.getRoot();
 	  while (curr.getRank() > rank)
 		  curr = (AVLNode)curr.getLeft();
+	  }
+	  else {
+		   curr = (AVLNode)tree.getRoot();
+		  while (curr.getRank() > rank)
+			  curr = (AVLNode)curr.getRight();
+	  }
 	  return curr;
    }
    
@@ -688,7 +698,7 @@ public class AVLTree {
 		   int rightRank = rightRoot.getRank(); 
 		   
 		   if (leftRank <= rightRank) {
-			   AVLNode b = findRankEquiv(rightTree, leftRank);
+			   AVLNode b = findRankEquiv(rightTree, leftRank, 'l');
 			   y.setRank(leftRank + 1);
 			   
 			   AVLNode c = (AVLNode)b.getParent();
@@ -707,7 +717,7 @@ public class AVLTree {
 		   }
 		   
 		   else {
-			   AVLNode b = findRankEquiv(leftTree, rightRank);
+			   AVLNode b = findRankEquiv(leftTree, rightRank, 'r');
 			   y.setRank(rightRank + 1);
 			   
 			   AVLNode c = (AVLNode)b.getParent();
@@ -931,7 +941,7 @@ public static void main(String args[]) {
 		System.out.println();
 		tree2.printTree();
 		
-		AVLTree[] arr = tree2.split(6);
+		AVLTree[] arr = tree2.split(8);
 		System.out.println(arr[0].size());
 		System.out.println(Arrays.toString(arr[0].keysToArray()));
 		System.out.println(Arrays.toString(arr[1].keysToArray()));
