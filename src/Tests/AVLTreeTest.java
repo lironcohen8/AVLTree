@@ -645,20 +645,24 @@ public class AVLTreeTest {
 	   }
 	   
 	   AVLNode cur = n;
-	   while (cur != this.root) {
+	   while (cur.getParent() != null) {
 		   if (cur.getParent().getRight() == cur) {// if cur is a right child			   
 			   temp.root = cur.getParent().getLeft();
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
+			   AVLNode p = (AVLNode)cur.getParent().getParent();
 			   T1.join(cur.getParent(), temp);
+			   cur = p;
 		   }
 		   else { // if cur is a left child
 			   temp.root = cur.getParent().getRight();
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
+			   cur.getParent().setParent(null);
+			   AVLNode p = (AVLNode)cur.getParent().getParent();
 			   T2.join(cur.getParent(), temp);
+			   cur = p;
 		   }
-		   cur = (AVLNode)cur.getParent();
 	   }
 	   T1.rebalanceInsert((AVLNode)n.getLeft());
 	   T2.rebalanceInsert((AVLNode)n.getRight());

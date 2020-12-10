@@ -27,6 +27,8 @@ public class MainTester {
 		else System.out.println("keys to array is fine");
 		if (!split()) System.out.println("Error in split"); //Checks basic split
 		else System.out.println("split is fine");
+		if (!split2()) System.out.println("Error in split2"); //Checks basic split
+		else System.out.println("split2 is fine");
 		if (!join()) System.out.println("Error in join"); //Checks basic join
 		else System.out.println("join is fine");
 		if (!select()) System.out.println("Error in select"); //Checks basic search
@@ -196,18 +198,18 @@ public class MainTester {
 	
 	public static boolean split() {
         AVLTreeTest avlTree = new AVLTreeTest();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             avlTree.insert(i, "num" + i);
         }
-        AVLTreeTest[] tt = avlTree.split(7);
+        AVLTreeTest[] tt = avlTree.split(6);
         
-        if ((tt[0].size()!=7)||(tt[1].size()!=2)) {
+        if ((tt[0].size()!=6)||(tt[1].size()!=5)) {
         	System.out.println("error 1");
         	System.out.println("got left " + tt[0].size());
         	System.out.println("got right " + tt[1].size());
         	return false;
         }
-        if ((tt[0].max()=="num"+6)||(tt[1].min()=="num"+8)){
+        if ((tt[0].max()=="num"+5)||(tt[1].min()=="num"+7)){
         	System.out.println("error 2");
         	return false;
         }
