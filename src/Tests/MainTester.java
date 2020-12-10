@@ -81,10 +81,10 @@ public class MainTester {
 
 	public static boolean insertDelete_and_size() {
         AVLTreeTest avlTree = new AVLTreeTest();
-        insertShuffle(avlTree,10);
-        insertDeleteShuffle(avlTree,7000);
+        insertShuffle(avlTree,1000);
+        insertDeleteShuffle(avlTree,500);
         
-        if (avlTree.size() != 3000) {
+        if (avlTree.size() != 500) {
         	return false;
         }
         
@@ -129,16 +129,20 @@ public class MainTester {
         if (avlTree.min() != null) {
             return false;
         }
-        insertN(avlTree, 100,0);
-        deleteN(avlTree,100,0);
-        deleteN(avlTree,10,90);
-        if (!avlTree.min().equals("i50")) {
+        insertN(avlTree,10,0);
+        deleteN(avlTree,5,0);
+        deleteN(avlTree,2,8);
+        if (!avlTree.min().equals("i5")) {
+        	System.out.println("i5");
             return false;
         }
-        if (!avlTree.max().equals("i89")) {
+        if (!avlTree.max().equals("i7")) {
+        	System.out.println("i7");
+        	System.out.println("got " + avlTree.max());
             return false;
         }
         if (avlTree.size() != 40) {
+        	System.out.println("size");
             return false;
         }
 
