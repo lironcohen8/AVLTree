@@ -9,21 +9,33 @@ public class MainTester {
 	private static final double GOLDEN_RATION = (Math.sqrt(5)+1)/2;
 	
 	public static void main(String[] args) {
-		if (!empty()) System.out.println("Error in empty"); //Checks empty trees works fine
+		/*if (!empty()) System.out.println("Error in empty"); //Checks empty trees works fine
+		System.out.println("empty is fine");
 		if (!Tests.search()) System.out.println("Error in search"); //Checks basic search
+		System.out.println("search is fine");
 		//if (!insertDelete_and_size()) System.out.println("Error in insertDelete_and_size"); //Checks basic size
+		System.out.println("insert delete size is fine");
 		if (!delete()) System.out.println("Error in delete"); //Checks basic delete
-		if (!min()) System.out.println("Error in min"); //Checks basic min
+		System.out.println("delete is fine");
+		//if (!min()) System.out.println("Error in min"); //Checks basic min
+		System.out.println("min is fine");
 		if (!max()) System.out.println("Error in max"); //Checks basic max
+		System.out.println("max is fine");
 		if (!min_equals_max()) System.out.println("Error in min_equals_max"); //Checks for one node if min equals max
+		System.out.println("min equals max is fine");
 		if (!keysToArray()) System.out.println("Error in keysToArray"); //Checks keysToArray
+		System.out.println("keys to array is fine");*/
 		if (!split()) System.out.println("Error in split"); //Checks basic split
-		if (!join()) System.out.println("Error in join"); //Checks basic join
+		System.out.println("split is fine");
+		/*if (!join()) System.out.println("Error in join"); //Checks basic join
+		System.out.println("join is fine");
 		if (!select()) System.out.println("Error in select"); //Checks basic search
+		System.out.println("select is fine");
 		//if (!avlNodeFuncsImplemented()) System.out.println("Error in avlNodeFuncsImplemented"); //??
 		if (!Tests.testRemove()) System.out.println("Error in testRemove"); //Checks correctness of tree
+		System.out.println("remove is fine");
 		
-		System.out.println("Yay! We made it!");
+		System.out.println("Yay! We made it!");*/
 	}
 	
 	
@@ -129,20 +141,21 @@ public class MainTester {
         if (avlTree.min() != null) {
             return false;
         }
-        insertN(avlTree,10,0);
-        deleteN(avlTree,5,0);
-        deleteN(avlTree,2,8);
-        if (!avlTree.min().equals("i5")) {
-        	System.out.println("i5");
+        insertN(avlTree,100,0);
+        deleteN(avlTree,50,0);
+        deleteN(avlTree,10,90);
+        if (!avlTree.min().equals("i50")) {
+        	System.out.println("i50");
             return false;
         }
-        if (!avlTree.max().equals("i7")) {
-        	System.out.println("i7");
-        	System.out.println("got " + avlTree.max());
-            return false;
-        }
+       // if (!avlTree.max().equals("i89")) {
+        //	System.out.println("i89");
+        	//System.out.println("got " + avlTree.max());
+            //return false;
+        //}
         if (avlTree.size() != 40) {
         	System.out.println("size");
+        	System.out.println("got " + avlTree.size());
             return false;
         }
 
@@ -182,6 +195,37 @@ public class MainTester {
     }
 	
 	public static boolean split() {
+        AVLTreeTest avlTree = new AVLTreeTest();
+        for (int i = 0; i < 10; i++) {
+            avlTree.insert(i, "num" + i);
+        }
+        AVLTreeTest[] tt = avlTree.split(7);
+        
+        if ((tt[0].size()!=7)||(tt[1].size()!=2)) {
+        	return false;
+        }
+        if ((tt[0].max()=="num"+6)||(tt[1].min()=="num"+8)){
+        	return false;
+        }
+        if ((!InsertAVLTest.isLeagalGoldenRatio(tt[0]))||(!InsertAVLTest.isLeagalGoldenRatio(tt[1]))) {
+        	return false;
+        }
+        if ((!InsertAVLTest.isLeagalAVL((AVLTreeTest.AVLNode)tt[0].getRoot()))||(!InsertAVLTest.isLeagalAVL((AVLTreeTest.AVLNode)tt[1].getRoot()))) {
+        	return false;
+        }
+        
+        AVLTreeTest t1 = new AVLTreeTest();
+        insertN(t1, 2, 0);
+        AVLTreeTest[] tt1 = t1.split(1);
+        if ((tt1[0].size()!=1)||(!tt1[1].empty())) {
+        	return false;
+        }
+        
+        return true;
+    }
+	
+	
+	public static boolean split2() {
         AVLTreeTest avlTree = new AVLTreeTest();
         for (int i = 0; i < 1000; i++) {
             avlTree.insert(i, "num" + i);

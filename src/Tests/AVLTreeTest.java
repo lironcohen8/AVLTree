@@ -632,10 +632,14 @@ public class AVLTreeTest {
 	   AVLTreeTest temp = new AVLTreeTest();
 	   
 	   AVLNode n = treePosition(x); // finding x's node
-	   if (n.getLeft().getKey() != -1)
+	   if (n.getLeft().getKey() != -1) {
 		   T1.root = n.getLeft(); // Initialising the smaller tree-
-	   if (n.getRight().getKey() != -1)
+		   T1.root.setParent(null);
+	   }
+	   if (n.getRight().getKey() != -1) {
 		   T2.root = n.getRight(); // Initialising the bigger tree
+		   T2.root.setParent(null);
+	   }
 	   
 	   AVLNode cur = n;
 	   while (cur != this.root) {
@@ -725,7 +729,8 @@ public class AVLTreeTest {
 			   
 			   AVLNode c = (AVLNode)b.getParent();
 			   y.setParent(c);
-			   c.setLeft(y);
+			   if (c != null)
+				   c.setLeft(y);
 			   
 			   y.setRight(b);
 			   b.setParent(y);
@@ -744,7 +749,8 @@ public class AVLTreeTest {
 			   
 			   AVLNode c = (AVLNode)b.getParent();
 			   y.setParent(c);
-			   c.setRight(y);
+			   if (c != null)
+				   c.setRight(y);
 			   
 			   y.setLeft(b);
 			   b.setParent(y);
