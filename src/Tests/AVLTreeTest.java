@@ -741,8 +741,12 @@ public class AVLTreeTest {
 			   y.setLeft(leftRoot);
 			   leftRoot.setParent(y);
 			   
-			   this.root = rightRoot;
-			   this.root.setParent(null);
+			   if (y.getParent() == null)
+				   this.root = y;
+			   else {
+				   this.root = rightRoot;
+				   this.root.setParent(null);
+			   }
 			   rebalanceInsert(y);
 		   }
 		   
