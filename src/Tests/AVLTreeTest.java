@@ -286,7 +286,7 @@ public class AVLTreeTest {
    */   
   private int rebalanceInsert(AVLNode n) {
 	  AVLNode p = (AVLNode)n.getParent();
-	  if (this.getRoot() == n)
+	  if (p == null)
 		  return 0;
 	  if (rankDiff(p, n) == 0) { // rank difference 0
 		  if (rankDiff(p, otherChild(p, n)) == 1) // needs promotion
