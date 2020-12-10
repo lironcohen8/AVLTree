@@ -648,10 +648,14 @@ public class AVLTreeTest {
 	   while (cur != this.root) {
 		   if (cur.getParent().getRight() == cur) {// if cur is a right child			   
 			   temp.root = cur.getParent().getLeft();
+			   if (temp.root.getKey() == -1)
+				   temp.root = null;
 			   T1.join(cur.getParent(), temp);
 		   }
 		   else { // if cur is a left child
 			   temp.root = cur.getParent().getRight();
+			   if (temp.root.getKey() == -1)
+				   temp.root = null;
 			   T2.join(cur.getParent(), temp);
 		   }
 		   cur = (AVLNode)cur.getParent();
