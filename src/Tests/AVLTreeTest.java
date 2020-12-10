@@ -302,7 +302,7 @@ public class AVLTreeTest {
 				  else if (rankDiff(n, (AVLNode)n.getLeft()) == 2 
 					&& rankDiff(n, (AVLNode)n.getRight()) == 1) // leftRight rotation
 						  return leftRightRotate(n, (AVLNode)n.getRight()) 
-								  + demote(n) + demote(p) + promote((AVLNode)n.getRight());
+								  + demote(n) + demote(p) + promote((AVLNode)n.getParent());
 			  }
 			  else {
 				  if (rankDiff(n, (AVLNode)n.getRight()) == 1 
@@ -311,7 +311,7 @@ public class AVLTreeTest {
 				  else if (rankDiff(n, (AVLNode)n.getRight()) == 2 
 					&& rankDiff(n, (AVLNode)n.getLeft()) == 1) // rightLeft rotation
 					      return rightLeftRotate(n, (AVLNode)n.getLeft())
-					    		  + demote(n) + demote(p) + promote((AVLNode)n.getLeft());
+					    		  + demote(n) + demote(p) + promote((AVLNode)n.getParent());
 			  }			  
 		  }
 	  }
