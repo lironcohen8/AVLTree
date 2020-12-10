@@ -464,7 +464,7 @@ public class AVLTreeTest {
    */
    public int delete(int k)
    {
-	   if(this.root == null) {
+	   if(this.root == null) { // if the tree is empty
 		   return -1;
 	   }
 	   AVLNode n = treePosition(k); // returns the wanted node
@@ -649,8 +649,8 @@ public class AVLTreeTest {
 		   }
 		   cur = (AVLNode)cur.getParent();
 	   }
-	   //T1.rebalanceInsert((AVLNode)n.getLeft());
-	   //T2.rebalanceInsert((AVLNode)n.getRight());
+	   T1.rebalanceInsert((AVLNode)n.getLeft());
+	   T2.rebalanceInsert((AVLNode)n.getRight());
 	   AVLTreeTest[] result = {T1,T2}; 
 	   return result;
    }
@@ -661,12 +661,12 @@ public class AVLTreeTest {
     *
     * gets a tree and a rank returns the first left node whose rank is less or equals to given rank.
     */
-   private AVLNode findRankEquiv(AVLTreeTest tree, int rank, char D ) {
+   private AVLNode findRankEquiv(AVLTreeTest tree, int rank, char D) {
 	  AVLNode curr;
 	  if (D == 'l') {
-	  curr = (AVLNode)tree.getRoot();
-	  while (curr.getRank() > rank)
-		  curr = (AVLNode)curr.getLeft();
+		  curr = (AVLNode)tree.getRoot();
+		  while (curr.getRank() > rank)
+			  curr = (AVLNode)curr.getLeft();
 	  }
 	  else {
 		   curr = (AVLNode)tree.getRoot();
