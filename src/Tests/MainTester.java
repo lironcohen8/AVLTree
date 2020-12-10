@@ -9,33 +9,33 @@ public class MainTester {
 	private static final double GOLDEN_RATION = (Math.sqrt(5)+1)/2;
 	
 	public static void main(String[] args) {
-		/*if (!empty()) System.out.println("Error in empty"); //Checks empty trees works fine
-		System.out.println("empty is fine");
+		if (!empty()) System.out.println("Error in empty"); //Checks empty trees works fine
+		else System.out.println("empty is fine");
 		if (!Tests.search()) System.out.println("Error in search"); //Checks basic search
-		System.out.println("search is fine");
+		else System.out.println("search is fine");
 		//if (!insertDelete_and_size()) System.out.println("Error in insertDelete_and_size"); //Checks basic size
-		System.out.println("insert delete size is fine");
+		//else System.out.println("insert delete size is fine");
 		if (!delete()) System.out.println("Error in delete"); //Checks basic delete
-		System.out.println("delete is fine");
+		else System.out.println("delete is fine");
 		//if (!min()) System.out.println("Error in min"); //Checks basic min
-		System.out.println("min is fine");
+		// else System.out.println("min is fine");
 		if (!max()) System.out.println("Error in max"); //Checks basic max
-		System.out.println("max is fine");
+		else System.out.println("max is fine");
 		if (!min_equals_max()) System.out.println("Error in min_equals_max"); //Checks for one node if min equals max
-		System.out.println("min equals max is fine");
+		else System.out.println("min equals max is fine");
 		if (!keysToArray()) System.out.println("Error in keysToArray"); //Checks keysToArray
-		System.out.println("keys to array is fine");*/
+		else System.out.println("keys to array is fine");
 		if (!split()) System.out.println("Error in split"); //Checks basic split
-		System.out.println("split is fine");
-		/*if (!join()) System.out.println("Error in join"); //Checks basic join
-		System.out.println("join is fine");
+		else System.out.println("split is fine");
+		if (!join()) System.out.println("Error in join"); //Checks basic join
+		else System.out.println("join is fine");
 		if (!select()) System.out.println("Error in select"); //Checks basic search
-		System.out.println("select is fine");
+		else System.out.println("select is fine");
 		//if (!avlNodeFuncsImplemented()) System.out.println("Error in avlNodeFuncsImplemented"); //??
 		if (!Tests.testRemove()) System.out.println("Error in testRemove"); //Checks correctness of tree
-		System.out.println("remove is fine");
+		else System.out.println("remove is fine");
 		
-		System.out.println("Yay! We made it!");*/
+		System.out.println("Yay! We made it!");
 	}
 	
 	
