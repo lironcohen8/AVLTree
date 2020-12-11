@@ -990,9 +990,11 @@ public static void main(String args[]) {
 		System.out.println(Arrays.toString(arr[1].keysToArray()));
 	}
 	printableTree tree4 = new printableTree();
-	 int[] values = new int[]{16, 24, 36, 19, 44, 28, 61, 74, 83, 64, 52, 65, 86, 93, 88};
+	 int[] values = new int[]{16, 24, 36, 19, 44, 28, 61}; //74, 83, 64, 52, 65, 86, 93, 88};
      for (int val : values) {
          tree4.insert(val, "" + val);
+ 		tree4.printTree();
+
      }
      tree4.printTree();
 	
