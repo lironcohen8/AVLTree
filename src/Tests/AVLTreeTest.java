@@ -289,7 +289,7 @@ public class AVLTreeTest {
    */   
   private int rebalanceInsert(AVLNode n) {
 	  AVLNode p = (AVLNode)n.getParent();
-	  if (p == null)
+	  if (n == null)
 		  return 0;
 	  if (rankDiff(p, n) == 0) { // rank difference 0
 		  if (rankDiff(p, otherChild(p, n)) == 1) // needs promotion
@@ -636,7 +636,7 @@ public class AVLTreeTest {
 	   
 	   AVLNode n = treePosition(x); // finding x's node
 	   if (n.getLeft().getKey() != -1) {
-		   T1.root = n.getLeft(); // Initialising the smaller tree-
+		   T1.root = n.getLeft(); // Initialising the smaller tree
 		   T1.root.setParent(null);
 	   }
 	   if (n.getRight().getKey() != -1) {
@@ -648,28 +648,27 @@ public class AVLTreeTest {
 	   while (cur != null) {
 		   if (cur.getParent().getRight() == cur) {// if cur is a right child			   
 			   temp.root = cur.getParent().getLeft();
+			   temp.root.setParent(null);
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
-			   AVLNode p = (AVLNode)cur.getParent().getParent();
-			   T1.join(cur.getParent(), temp);
-			   cur = p;
+			   AVLNode y = clone((AVLNode)cur.getParent());
+			   T1.join(y, temp);
 		   }
 		   else { // if cur is a left child
 			   temp.root = cur.getParent().getRight();
+			   temp.root.setParent(null);
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
-			   cur.getParent().setParent(null);
-			   AVLNode p = (AVLNode)cur.getParent().getParent();
-			   T2.join(cur.getParent(), temp);
-			   cur = p;
+			   AVLNode y = clone((AVLNode)cur.getParent());
+			   T2.join(y, temp);
 		   }
+		   cur = (AVLNode)cur.getParent();
 	   }
 	   T1.rebalanceInsert((AVLNode)n.getLeft());
 	   T2.rebalanceInsert((AVLNode)n.getRight());
 	   AVLTreeTest[] result = {T1,T2}; 
 	   return result;
    }
-   
    
    /**
     * private AVLNode findRankEquiv(AVLTree tree, int rank)
@@ -690,7 +689,17 @@ public class AVLTreeTest {
 	  }
 	  return curr;
    }
-   
+
+   /**
+    * private AVLNode clone(AVLNode n)
+    *
+    * gets a node and a returns a clone node that has the node's key, value and rank, without parent and children
+    */
+   private AVLNode clone(AVLNode n) {
+	  AVLNode res = new AVLNode(n.getKey(), n.getValue());
+	  res.setRank(n.getRank());
+	  return res;
+   }
    
    /**
     * public join(IAVLNode x, AVLTree t)
