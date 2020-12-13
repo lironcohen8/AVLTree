@@ -399,6 +399,7 @@ public class AVLTreeTest {
  		}
  	else { // deleting a node with two children
  		AVLNode m = successor(n);
+ 		AVLNode p = (AVLNode)m.getParent();
  		deleteBST(m); // deleting successor from tree
  		if (y != null) { // n is not the root
  			if (y.getLeft() == n) // adding successor instead of node
@@ -417,7 +418,10 @@ public class AVLTreeTest {
  		n.getRight().setParent(m);
  		m.setRight(n.getRight());
  		
- 		return m;
+ 		if (p == n)
+ 			return m;
+ 		else
+ 			return p;
  		}
    }
    
@@ -1061,6 +1065,7 @@ public static void main(String args[]) {
     }
     //tree7.printTree();
     //System.out.println(tree7.size());
+    tree7.printTree();
     tree7.delete(4);
     System.out.println(tree7.size());
     tree7.printTree();
