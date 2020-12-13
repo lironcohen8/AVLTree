@@ -13,8 +13,8 @@ public class MainTester {
 		else System.out.println("empty is fine");
 		if (!Tests.search()) System.out.println("Error in search"); //Checks basic search
 		else System.out.println("search is fine");
-		//if (!insertDelete_and_size()) System.out.println("Error in insertDelete_and_size"); //Checks basic size
-		//else System.out.println("insert delete size is fine");
+		if (!insertDelete_and_size()) System.out.println("Error in insertDelete_and_size"); //Checks basic size
+		else System.out.println("insert delete size is fine");
 		if (!delete()) System.out.println("Error in delete"); //Checks basic delete
 		else System.out.println("delete is fine");
 		if (!min()) System.out.println("Error in min"); //Checks basic min
@@ -97,6 +97,7 @@ public class MainTester {
         AVLTreeTest avlTree = new AVLTreeTest();
         insertShuffle(avlTree,1000);
         insertDeleteShuffle(avlTree,500);
+        System.out.println("here");
         
         if (avlTree.size() != 500) {
         	return false;
