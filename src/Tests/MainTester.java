@@ -41,7 +41,6 @@ public class MainTester {
 		System.out.println("Yay! We made it!");
 	}
 	
-	
 	/**
 	 * The methods we use in the tests
 	 * 
