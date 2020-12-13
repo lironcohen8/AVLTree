@@ -440,22 +440,22 @@ public class AVLTreeTest {
  	  else if (rankDiff(p, leftChild) == 3 && rankDiff(p, rightChild) == 1) {// rank differences 3,1
  		  if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 1 // 1,1
  				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1) 
- 			  return leftRotate(p, rightChild) + demote(p) + promote(rightChild);
+ 			  return demote(p) + promote(rightChild) + leftRotate(p, rightChild);
  		  else if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 2 // 2,1
 				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1) 
-			  return leftRotate(p, rightChild) + demote(p) + demote(p) + rebalanceDelete((AVLNode)p.getParent());
- 		  else return rightLeftRotate(rightChild, (AVLNode)rightChild.getLeft()) // 1,2
- 				  + demote(p) + demote(p) + demote((AVLNode)p.getRight()) + promote((AVLNode)rightChild.getLeft()); 
+			  return demote(p) + demote(p) + leftRotate(p, rightChild) + rebalanceDelete((AVLNode)p.getParent());
+ 		  else return demote(p) + demote(p) + demote(rightChild) + promote((AVLNode)rightChild.getLeft()) 
+ 				  + rightLeftRotate(rightChild, (AVLNode)rightChild.getLeft()); // 1,2
  	  }
  	 else if (rankDiff(p, leftChild) == 1 && rankDiff(p, rightChild) == 3) {// rank differences 1,3
 		  if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,1
 				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 1) 
-			  return rightRotate(p, leftChild) + demote(p) + promote(leftChild);
+			  return demote(p) + promote(leftChild) + rightRotate(p, leftChild);
 		  else if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,2
 				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 2) 
-			  return rightRotate(p, leftChild) + demote(p) + demote(p) + rebalanceDelete((AVLNode)p.getParent());
-		  else return leftRightRotate(leftChild, (AVLNode)leftChild.getRight()) // 2,1
-				  + demote(p) + demote(p) + demote((AVLNode)p.getLeft()) + promote((AVLNode)leftChild.getRight()); 
+			  return demote(p) + demote(p) + rightRotate(p, leftChild) + rebalanceDelete((AVLNode)p.getParent());
+		  else return demote(p) + demote(p) + demote(leftChild) + promote((AVLNode)leftChild.getRight()) 
+			  	+ leftRightRotate(leftChild, (AVLNode)leftChild.getRight()); // 2,1 
 	  }
  	  return 0; // no rebalancing operation was taken
    }
@@ -769,7 +769,7 @@ public class AVLTreeTest {
 				   this.root = rightRoot;
 				   this.root.setParent(null);
 			   }
-			   rebalanceInsert(y);
+			   rebalanceInsert((AVLNode)y.getParent());
 		   }
 		   
 		   else {
@@ -789,7 +789,7 @@ public class AVLTreeTest {
 			   
 			   this.root = leftRoot;
 			   this.root.setParent(null);
-			   rebalanceInsert(y);
+			   rebalanceInsert((AVLNode)y.getParent());
 		   }
 	   }
 	  updateSize((AVLNode)x); //updating the size attribute of the relevant nodes; 
@@ -1004,7 +1004,7 @@ public static void main(String args[]) {
 		System.out.println(Arrays.toString(arr[1].keysToArray()));
 	}*/
 	printableTree tree4 = new printableTree();
-	 int[] values = new int[]{16, 24, 36, 19, 44, 28, 61}; //74, 83, 64, 52, 65, 86, 93, 88};
+	 int[] values = new int[]{16, 24, 36, 19, 44, 28, 61}; //74}; 83, 64, 52, 65, 86, 93, 88};
      for (int val : values) {
          tree4.insert(val, "" + val);
  		tree4.printTree();
