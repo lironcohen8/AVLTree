@@ -483,7 +483,7 @@ public class AVLTreeTest {
 	   
 	   AVLNode p = deleteBST(n); // deleting n according to BST rules
 	   int result = rebalanceDelete(p); // rebalancing the tree 
-	   updateSize(n); // updating the size attribute of the relevant nodes
+	   updateSize(p); // updating the size attribute of the relevant nodes
 	   return result; 
    }
 
@@ -1020,7 +1020,7 @@ public static void main(String args[]) {
      }
 	tree5.printTree();
 	tree5.delete(99);
-	tree5.printTree();*/
+	tree5.printTree();
 	
 	printableTree tree6 = new printableTree();
 	for (int i=0 ; i<100; i++)
@@ -1036,6 +1036,35 @@ public static void main(String args[]) {
 	System.out.println("after deleting 93");
 	tree6.printTree();
 	
-  
+	printableTree tree7 = new printableTree();
+	int[] values7 = new int[]{1,2,3,4,5,6,7};
+    for (int val : values7) {
+        tree7.insert(val, "" + val);
+    }
+    printableTree tree8 = new printableTree();
+    int[] values8 = new int[]{9,10,11,12,13,14,15};
+    for (int val : values8) {
+        tree8.insert(val, "" + val);
+    }
+    System.out.println(tree7.getRank());
+    System.out.println(tree8.getRank());
+    AVLTreeTest dummy = new AVLTreeTest();
+	dummy.insert(8, "8");
+    tree7.join(dummy.root, tree8);
+    System.out.println("tree7 size " + tree7.size());
+    tree7.printTree();*/
+	
+	printableTree tree7 = new printableTree();
+	int[] values7 = new int[]{1,2,3,4,5,6,7};
+    for (int val : values7) {
+        tree7.insert(val, "" + val);
+    }
+    //tree7.printTree();
+    //System.out.println(tree7.size());
+    tree7.delete(4);
+    System.out.println(tree7.size());
+    tree7.printTree();
+	
+	
 }
 }

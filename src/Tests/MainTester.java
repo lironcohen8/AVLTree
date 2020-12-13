@@ -219,8 +219,8 @@ public class MainTester {
         	System.out.println("error 3");
         	return false;
         }
-       // if ((!InsertAVLTest.isLeagalAVL((AVLTreeTest.AVLNode)tt[0].getRoot()))||(!InsertAVLTest.isLeagalAVL((AVLTreeTest.AVLNode)tt[1].getRoot()))) {
-        //	return false;
+        //if ((!InsertAVLTest.isLeagalAVL((AVLTreeTest.AVLNode)tt[0].getRoot()))||(!InsertAVLTest.isLeagalAVL((AVLTreeTest.AVLNode)tt[1].getRoot()))) {
+        	//return false;
         //}
         
         AVLTreeTest t1 = new AVLTreeTest();
@@ -270,11 +270,14 @@ public class MainTester {
         AVLTreeTest t2 = new AVLTreeTest();
         
         insertN(t1, 100, 0);
+        System.out.println("size t1 after 100: " + t1.size());
         deleteN(t1, 10, 10);
         insertN(t2, 100, 101);
         x.insert(100, "i"+100);
+        System.out.println("size t1 after deleting 10: " + t1.size());
+        System.out.println("size t2: " + t2.size());
         t1.join(x.getRoot(), t2);
-        
+        System.out.println(Arrays.toString(t1.keysToArray()));
         if (t1.size()!=191) {
         	System.out.print("error 1 join, ");
         	System.out.println("got " + t1.size());
