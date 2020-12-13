@@ -399,7 +399,6 @@ public class AVLTreeTest {
  		}
  	else { // deleting a node with two children
  		AVLNode m = successor(n);
- 		AVLNode p = (AVLNode)m.getParent();
  		deleteBST(m); // deleting successor from tree
  		if (y != null) { // n is not the root
  			if (y.getLeft() == n) // adding successor instead of node
@@ -407,8 +406,9 @@ public class AVLTreeTest {
  			else
  				y.setRight(m);
  		}
- 		else
+ 		else {
  			this.root = m;
+ 		}
  		
  		m.setParent(y);
  		m.setRank(n.getRank());
@@ -416,7 +416,8 @@ public class AVLTreeTest {
  		m.setLeft(n.getLeft());
  		n.getRight().setParent(m);
  		m.setRight(n.getRight());
- 		return p;
+ 		
+ 		return m;
  		}
    }
    
@@ -1002,7 +1003,7 @@ public static void main(String args[]) {
 		System.out.println(arr[0].size());
 		System.out.println(Arrays.toString(arr[0].keysToArray()));
 		System.out.println(Arrays.toString(arr[1].keysToArray()));
-	}*/
+	}
 	printableTree tree4 = new printableTree();
 	 int[] values = new int[]{16, 24, 36, 19, 44, 28, 61}; //74}; 83, 64, 52, 65, 86, 93, 88};
      for (int val : values) {
@@ -1012,6 +1013,28 @@ public static void main(String args[]) {
      }
      tree4.printTree();
 	
+     printableTree tree5 = new printableTree();
+	 int[] values5 = new int[]{99, 9, 200, 5, 50, 300, 3, 12, 60};
+     for (int val : values5) {
+         tree5.insert(val, "" + val);
+     }
+	tree5.printTree();
+	tree5.delete(99);
+	tree5.printTree();*/
+	
+	printableTree tree6 = new printableTree();
+	for (int i=0 ; i<100; i++)
+		tree6.insert(i, ""+i);
+	for (int j=0 ; j<50; j++)
+		tree6.delete(j);
+	tree6.delete(90);
+	tree6.delete(91);
+	tree6.delete(92);
+	System.out.println("before deleting 93");
+	tree6.printTree();
+	tree6.delete(93);
+	System.out.println("after deleting 93");
+	tree6.printTree();
 	
   
 }
