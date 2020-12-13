@@ -650,7 +650,7 @@ public class AVLTreeTest {
 	   }
 	   
 	   AVLNode cur = n;
-	   while (cur != null) {
+	   while (cur.getParent() != null) {
 		   if (cur.getParent().getRight() == cur) {// if cur is a right child			   
 			   temp.root = cur.getParent().getLeft();
 			   temp.root.setParent(null);
@@ -669,8 +669,8 @@ public class AVLTreeTest {
 		   }
 		   cur = (AVLNode)cur.getParent();
 	   }
-	   T1.rebalanceInsert((AVLNode)n.getLeft());
-	   T2.rebalanceInsert((AVLNode)n.getRight());
+	   T1.rebalanceInsert((AVLNode)n.getLeft().getParent());
+	   T2.rebalanceInsert((AVLNode)n.getRight().getParent());
 	   AVLTreeTest[] result = {T1,T2}; 
 	   return result;
    }
