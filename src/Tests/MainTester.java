@@ -13,12 +13,12 @@ public class MainTester {
 		else System.out.println("empty is fine");
 		if (!Tests.search()) System.out.println("Error in search"); //Checks basic search
 		else System.out.println("search is fine");
-		//if (!insertDelete_and_size()) System.out.println("Error in insertDelete_and_size"); //Checks basic size
-		//else System.out.println("insert delete size is fine");
+		if (!insertDelete_and_size()) System.out.println("Error in insertDelete_and_size"); //Checks basic size
+		else System.out.println("insert delete size is fine");
 		if (!delete()) System.out.println("Error in delete"); //Checks basic delete
 		else System.out.println("delete is fine");
-		//if (!min()) System.out.println("Error in min"); //Checks basic min
-		// else System.out.println("min is fine");
+		if (!min()) System.out.println("Error in min"); //Checks basic min
+		else System.out.println("min is fine");
 		if (!max()) System.out.println("Error in max"); //Checks basic max
 		else System.out.println("max is fine");
 		if (!min_equals_max()) System.out.println("Error in min_equals_max"); //Checks for one node if min equals max
@@ -33,7 +33,7 @@ public class MainTester {
 		else System.out.println("join is fine");
 		if (!select()) System.out.println("Error in select"); //Checks basic search
 		else System.out.println("select is fine");
-		//if (!avlNodeFuncsImplemented()) System.out.println("Error in avlNodeFuncsImplemented"); //??
+		if (!avlNodeFuncsImplemented()) System.out.println("Error in avlNodeFuncsImplemented"); //??
 		if (!Tests.testRemove()) System.out.println("Error in testRemove"); //Checks correctness of tree
 		else System.out.println("remove is fine");
 		
@@ -274,18 +274,24 @@ public class MainTester {
         t1.join(x.getRoot(), t2);
         
         if (t1.size()!=191) {
+        	System.out.print("error 1 join, ");
+        	System.out.println("got " + t1.size());
         	return false;
         }
         if (!Tests.checkBalanceOfTree(t1.getRoot())) {
-            return false;
+        	System.out.println("error 2 join");
+        	return false;
         }
         if (!Tests.checkOrderingOfTree(t1.getRoot())) {
+        	System.out.println("error 3 join");
             return false;
         }
         if (!InsertAVLTest.isLeagalGoldenRatio(t1)) {
+        	System.out.println("error 4 join");
             return false;
         }
         if (!InsertAVLTest.isLeagalAVL((AVLTreeTest.AVLNode)t1.getRoot())) {
+        	System.out.println("error 5 join");
             return false;
         }
         
@@ -326,13 +332,6 @@ public class MainTester {
         ActualAVLTree.IAVLNode avlNode = (ActualAVLTree.IAVLNode) avlTree.getRoot();
         return true;
     }
-	
-
-
-
-	
-
-
 	
 
 }

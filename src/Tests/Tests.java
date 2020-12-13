@@ -285,44 +285,54 @@ public class Tests {
             return false;
         }
         if (!checkOrderingOfTree(tree.getRoot())) {
-        	System.out.println("error1");
+        	System.out.println("error24");
             return false;
         }
         if (tree.search(52) != null) {
-        	System.out.println("error1");
+        	System.out.println("error25");
             return false;
         }
 
         tree.delete(93);
         if (!checkBalanceOfTree(tree.getRoot())) {
+        	System.out.println("error26");
+
             return false;
         }
         if (!checkOrderingOfTree(tree.getRoot())) {
+        	System.out.println("error27");
             return false;
         }
         if (tree.search(93) != null) {
+        	System.out.println("error28");
             return false;
         }
 
         tree.delete(86);
         if (!checkBalanceOfTree(tree.getRoot())) {
+        	System.out.println("error29");
             return false;
         }
         if (!checkOrderingOfTree(tree.getRoot())) {
+        	System.out.println("error30");
             return false;
         }
         if (tree.search(86) != null) {
+        	System.out.println("error31");
             return false;
         }
 
         tree.delete(83);
         if (!checkBalanceOfTree(tree.getRoot())) {
+        	System.out.println("error32");
             return false;
         }
         if (!checkOrderingOfTree(tree.getRoot())) {
+        	System.out.println("error32");
             return false;
         }
         if (tree.search(83) != null) {
+        	System.out.println("error33");
             return false;
         }
         return true;
