@@ -37,6 +37,81 @@ public class AVLTreeTest {
     return root == null; // checking if the root is null
   }
 
+
+  /**
+   * public int size()
+   *
+   * Returns the number of nodes in the tree.
+   *
+   * precondition: none
+   * postcondition: none
+   */
+  public int size()
+  {
+	   if(this.root == null) 
+		   return 0;
+	   return ((AVLNode)this.root).getSize();
+  }
+  
+    /**
+   * public int getRoot()
+   *
+   * Returns the root AVL node, or null if the tree is empty
+   *
+   * precondition: none
+   * postcondition: none
+   */
+  public IAVLNode getRoot()
+  {
+	   return this.root;
+  }
+  
+  /**
+   * public int getRank()
+   *
+   * Returns the rank of the tree.
+   */
+  public int getRank()
+  {
+	   if (this.root == null)
+		   return -1;
+	   else
+		   return ((AVLNode)this.root).getHeight();
+  }
+  
+  /**
+   * public String min()
+   *
+   * Returns the info of the item with the smallest key in the tree,
+   * or null if the tree is empty
+   */
+  public String min()
+  {
+	   IAVLNode node = this.root;
+	   if (node == null)
+		   return null;
+	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
+		   node = node.getLeft();
+	   }
+	   return node.getValue();
+  }
+
+  /**
+   * public String max()
+   *
+   * Returns the info of the item with the largest key in the tree,
+   * or null if the tree is empty
+   */
+  public String max()
+  {
+	   IAVLNode node = this.root;
+	   if (node == null)
+		   return null;
+	   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
+		   node = node.getRight();
+	   }
+	   return node.getValue();
+  }
   
  /**
    * public String search(int k)
@@ -93,7 +168,7 @@ public class AVLTreeTest {
   private int insertBST(AVLNode n) {
 	AVLNode y = treePosition(n.getKey()); // return the parent of the new node
 	n.setParent(y); // set the new node's parent
-	n.setRank(0); // making sure the rank of the new node is 0
+	n.setHeight(0); // making sure the height of the new node is 0
 	if (n.getKey() == y.getKey()) // the node is already in the tree
 		return -1;
 	if (n.getKey() < y.getKey()) { // set as the left child
@@ -104,41 +179,7 @@ public class AVLTreeTest {
 	}
 	return 1;
   }
-
-
-  /**
-   * private AVLNode successor(AVLNode n)
-   *
-   * gets a node and return its successor node.
-   */
-  private AVLNode successor(AVLNode n) {
-	  AVLNode cur = n;
-	  if (n.getRight().getKey() != -1) {// node has a real right child
-		  cur = (AVLNode)n.getRight();
-		  while (cur.getLeft().getKey() != -1)
-			  cur = (AVLNode)cur.getLeft();
-		  return cur;
-	  }
-	  else { // node doesn't have a real right child
-		  while (cur.getParent().getRight() == cur) // cur is a right child
-			  cur = (AVLNode)cur.getParent();
-		  return (AVLNode)cur.getParent();
-	  }
-  }
   
-  
-  /**
-   * private AVLNode otherChild(AVLNode p, AVLNode c)
-   *
-   * The method gets a parent node and a child node.
-   * The method returns the parent's son which is not the given son.
-   */
-  private AVLNode otherChild(AVLNode p, AVLNode c) {
-	  if (p.getLeft() == c)
-		  return (AVLNode)p.getRight();
-	  else
-		  return (AVLNode)p.getLeft();
-  }
   
   /**
    * AVLNode rankDiff(AVLNode p, AVLNode c)
@@ -147,7 +188,7 @@ public class AVLTreeTest {
    * The method returns the rank differences between the two nodes.
    */
   private int rankDiff(AVLNode p, AVLNode c) {
-	  return p.getRank()-c.getRank();
+	  return p.getHeight()-c.getHeight();
   }
   
   /**
@@ -169,22 +210,22 @@ public class AVLTreeTest {
   /**
    * private int promote(AVLNode n)
    *
-   * The method gets a node and adds 1 to its rank.
+   * The method gets a node and adds 1 to its height attribute.
    * The method returns 1.
    */
   private int promote(AVLNode n) {
-	  n.setRank(n.getRank()+1);
+	  n.setHeight(n.getHeight()+1);
 	  return 1;
   }
   
   /**
    * private int demote(AVLNode n)
    *
-   * The method gets a node and subs 1 to its rank.
+   * The method gets a node and subs 1 to its height attribute.
    * The method returns 1.
    */
   private int demote(AVLNode n) {
-	  n.setRank(n.getRank()-1);
+	  n.setHeight(n.getHeight()-1);
 	  return 1;
   }  
 
@@ -336,7 +377,6 @@ public class AVLTreeTest {
 	   AVLNode n = new AVLNode(k, i);
 	   if (this.getRoot() == null) { // if the tree is empty
 		   this.root = n;
-		   updateSize(n); // updating the size attribute of the relevant nodes
 		   return 0;
 	   }
 	   int num = insertBST(n); //inserting n according to BST rules
@@ -349,6 +389,26 @@ public class AVLTreeTest {
 	   return num; // return number of rebalancing operations
    }
 
+   /**
+    * private AVLNode successor(AVLNode n)
+    *
+    * gets a node and return its successor node.
+    */
+   private AVLNode successor(AVLNode n) {
+ 	  AVLNode cur = n;
+ 	  if (n.getRight().getKey() != -1) {// node has a real right child
+ 		  cur = (AVLNode)n.getRight();
+ 		  while (cur.getLeft().getKey() != -1)
+ 			  cur = (AVLNode)cur.getLeft();
+ 		  return cur;
+ 	  }
+ 	  else { // node doesn't have a real right child
+ 		  while (cur.getParent().getRight() == cur) // cur is a right child
+ 			  cur = (AVLNode)cur.getParent();
+ 		  return (AVLNode)cur.getParent();
+ 	  }
+   }   
+   
    /**
     * private void deleteBST(IAVLNode n)
     *
@@ -412,7 +472,7 @@ public class AVLTreeTest {
  		}
  		
  		m.setParent(y);
- 		m.setRank(n.getRank());
+ 		m.setHeight(n.getHeight());
  		n.getLeft().setParent(m);
  		m.setLeft(n.getLeft());
  		n.getRight().setParent(m);
@@ -491,40 +551,6 @@ public class AVLTreeTest {
 	   return result; 
    }
 
-
-   /**
-    * public String min()
-    *
-    * Returns the info of the item with the smallest key in the tree,
-    * or null if the tree is empty
-    */
-   public String min()
-   {
-	   IAVLNode node = this.root;
-	   if (node == null)
-		   return null;
-	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
-		   node = node.getLeft();
-	   }
-	   return node.getValue();
-   }
-
-   /**
-    * public String max()
-    *
-    * Returns the info of the item with the largest key in the tree,
-    * or null if the tree is empty
-    */
-   public String max()
-   {
-	   IAVLNode node = this.root;
-	   if (node == null)
-		   return null;
-	   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
-		   node = node.getRight();
-	   }
-	   return node.getValue();
-   }
    
    /**
     * public IAVLNode[] nodesToArray()
@@ -588,47 +614,16 @@ public class AVLTreeTest {
 	  return arr;
   }
 
-   /**
-    * public int size()
-    *
-    * Returns the number of nodes in the tree.
-    *
-    * precondition: none
-    * postcondition: none
-    */
-   public int size()
-   {
-	   if(this.root == null) 
-		   return 0;
-	   return ((AVLNode)this.root).getSize();
-   }
-   
-     /**
-    * public int getRoot()
-    *
-    * Returns the root AVL node, or null if the tree is empty
-    *
-    * precondition: none
-    * postcondition: none
-    */
-   public IAVLNode getRoot()
-   {
-	   return this.root;
-   }
-   
-   /**
-    * public int getRank()
-    *
-    * Returns the rank of the tree.
-    */
-   public int getRank()
-   {
-	   if (this.root == null)
-		   return -1;
-	   else
-		   return ((AVLNode)this.root).getRank();
-   }
-   
+  /**
+   * private AVLNode clone(AVLNode n)
+   *
+   * gets a node and a returns a clone node that has the node's key, value and height, without parent and children
+   */
+  private AVLNode clone(AVLNode n) {
+	  AVLNode res = new AVLNode(n.getKey(), n.getValue());
+	  res.setHeight(n.getHeight());
+	  return res;
+  }   
    
      /**
     * public string split(int x)
@@ -685,31 +680,21 @@ public class AVLTreeTest {
     *
     * gets a tree and a rank returns the first left node whose rank is less or equals to given rank.
     */
-   private AVLNode findRankEquiv(AVLTreeTest tree, int rank, char D) {
+   private AVLNode findRankEquiv(AVLTreeTest tree, int rank, char d) {
 	  AVLNode curr;
-	  if (D == 'l') {
+	  if (d == 'l') {
 		  curr = (AVLNode)tree.getRoot();
-		  while (curr.getRank() > rank)
+		  while (curr.getHeight() > rank)
 			  curr = (AVLNode)curr.getLeft();
 	  }
 	  else {
 		   curr = (AVLNode)tree.getRoot();
-		  while (curr.getRank() > rank)
+		  while (curr.getHeight() > rank)
 			  curr = (AVLNode)curr.getRight();
 	  }
 	  return curr;
    }
 
-   /**
-    * private AVLNode clone(AVLNode n)
-    *
-    * gets a node and a returns a clone node that has the node's key, value and rank, without parent and children
-    */
-   private AVLNode clone(AVLNode n) {
-	  AVLNode res = new AVLNode(n.getKey(), n.getValue());
-	  res.setRank(n.getRank());
-	  return res;
-   }
    
    /**
     * public join(IAVLNode x, AVLTree t)
@@ -750,12 +735,12 @@ public class AVLTreeTest {
 		   AVLNode leftRoot = (AVLNode)leftTree.getRoot();
 		   AVLNode rightRoot = (AVLNode)rightTree.getRoot();
 		   
-		   int leftRank = leftRoot.getRank();
-		   int rightRank = rightRoot.getRank(); 
+		   int leftRank = leftRoot.getHeight();
+		   int rightRank = rightRoot.getHeight(); 
 		   
 		   if (leftRank <= rightRank) {
 			   AVLNode b = findRankEquiv(rightTree, leftRank, 'l');
-			   y.setRank(leftRank + 1);
+			   y.setHeight(leftRank + 1);
 			   
 			   AVLNode c = (AVLNode)b.getParent();
 			   y.setParent(c);
@@ -779,7 +764,7 @@ public class AVLTreeTest {
 		   
 		   else {
 			   AVLNode b = findRankEquiv(leftTree, rightRank, 'r');
-			   y.setRank(rightRank + 1);
+			   y.setHeight(rightRank + 1);
 			   
 			   AVLNode c = (AVLNode)b.getParent();
 			   y.setParent(c);
@@ -836,7 +821,6 @@ public class AVLTreeTest {
 	  	private IAVLNode right; // a reference to the node's right son
 	  	private boolean isReal; // if the node is real or virtual 
 	  	private int height; // keeps the node's height in the tree
-	  	private int rank; // keeps the node's rank
 	  	private int size; // keeps the node's subtree size
 	  	
 	  	public AVLNode(int key, String info) 
@@ -850,7 +834,7 @@ public class AVLTreeTest {
 	  			this.size = 1;
 	  		}
 	  			else {
-	  				this.rank = -1;
+	  				this.height = -1;
 	  				this.size = 0;
 	  			}
 	  		
@@ -900,14 +884,6 @@ public class AVLTreeTest {
 	    public int getHeight()
 	    {
 	    	return this.height;
-	    }
-	    public void setRank(int rank)
-	    {
-	    	this.rank = rank;
-	    }
-	    public int getRank()
-	    {
-	    	return this.rank;
 	    }
 	    public void setSize(int size)
 	    {
