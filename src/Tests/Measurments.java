@@ -1,6 +1,8 @@
 package Tests;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
@@ -9,12 +11,12 @@ import Tests.AVLTreeTest.IAVLNode;
 
 public class Measurments {
 
-	public static long insertionSort(long arr[]) 
+	public static long insertionSort(int[] arr) 
     { 
 		long count = 0;
         int n = arr.length; 
         for (int i = 1; i < n; i++) { 
-            long key = arr[i]; 
+            int key = arr[i]; 
             int j = i - 1; 
   
             /* Move elements of arr[0..i-1], that are 
@@ -30,21 +32,25 @@ public class Measurments {
         return count;
     }
 	
-	public static long[] down(int n) {
-		long[] res = new long[n];
+	public static int[] down(int n) {
+		int[] res = new int[n];
 		for (int i = 0 ; i<n; i++)
 			res[i] = n-i-1;
 		return res;
 	}
 	
-	public static long[] rand(int n) {
-		Random random = new Random();
-		long[] res = new long[n];
-		for (int i=0; i<n; i++) {
-			int val = random.nextInt(n);
-			res[i] = val;
-			}
-		return res;
+	public static Integer[] rand(int n) {
+		Integer[] arr = new Integer[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = i;
+        }
+
+        List<Integer> intList = Arrays.asList(arr);
+        Collections.shuffle(intList);
+        intList.toArray(arr);
+        
+        return arr;
 	}
 	
 	static void printArray(long arr[])
@@ -63,28 +69,81 @@ public class Measurments {
 		return res;
 	}
 	
-	static void part1Array() {
+	static void part1Array () {
 		for (int i=1; i<11; i++) {
-			long[] randArr = rand(10000*i);
-			long[] randArrSorted = Arrays.copyOf(randArr, 10000*i);
+			int[] randArr = rand(10000*i);
+			//long[] randArrSorted = Arrays.copyOf(randArr, 10000*i);
 			System.out.println("rand " + 10000*i + " count: " + insertionSort(randArr));
-			Arrays.sort(randArrSorted);
-			System.out.println(Arrays.equals(randArrSorted, randArr));
-			long[] downArr = down(10000*i);
+			//Arrays.sort(randArrSorted);
+			//System.out.println(Arrays.equals(randArrSorted, randArr));
+			int[] downArr = down(10000*i);
 			System.out.println("down " + 10000*i + " count: " + insertionSort(downArr));
-			System.out.println(Arrays.equals(downArr, sortedArray(10000*i)));
+			//System.out.println(Arrays.equals(downArr, sortedArray(10000*i)));
 		}
 	}
 	
 	
 	static void part1AVL() {
-		
+		for (int i=1; i<11; i++) {
+			long count1 = 0;
+			int[] randArr = rand(10000*i);
+			FSAVLTree t1 = new FSAVLTree();
+			t1.insertToTree(randArr);
+			//long[] randArrSorted = Arrays.copyOf(randArr, 10000*i);
+			System.out.println("rand " + 10000*i + " count: " + insertionSort(randArr));
+			//Arrays.sort(randArrSorted);
+			//System.out.println(Arrays.equals(randArrSorted, randArr));
+			
+			long count2 = 0;
+			int[] downArr = down(10000*i);
+			FSAVLTree t2 = new FSAVLTree();
+			t2.insertToTree(downArr);
+			System.out.println("down " + 10000*i + " count: " + insertionSort(downArr));
+			//System.out.println(Arrays.equals(downArr, sortedArray(10000*i)));
+		}
 	}
 	
 public static void main(String[] args)
 {
+	System.out.println("~~~ Part 1 ~~~");
 	part1Array();
 	part1AVL();
+}
+
+public static class FSAVLTree extends AVLTreeTest {
+    private long insertPosition(AVLNode x, int key) {
+    	long count = 0;
+    	AVLNode maxNode = (AVLNode)this.max;
+
+        while ((maxNode.getKey() > key) && (maxNode != this.root)) {
+            count += 1;
+            maxNode = (AVLNode) maxNode.getParent();
+        }
+
+        x = maxNode;
+        AVLNode y = x;
+        while (x.isRealNode()) {
+            count += 1;
+            y = x;
+            if (key == x.getKey()) {
+                return count;
+            } else {
+                if (key < x.getKey()) {
+                    x = (AVLNode) x.getLeft();
+                } else {
+                    x = (AVLNode) x.getRight();
+                }
+            }
+        }
+        return 0;
+    }
+    
+    private static FSAVLTree insertToTree(int[] arr) {
+    	FSAVLTree t = new FSAVLTree();    	
+    	for (int num : arr)
+    		t.insert(num, ""+num);
+    	return t;
+    } 
 }
 
 
@@ -98,9 +157,9 @@ public static void main(String[] args)
  */
 
 public class AVLTreeTest {
-	private IAVLNode root;
-	private IAVLNode min;
-	private IAVLNode max;
+	protected IAVLNode root;
+	protected IAVLNode min;
+	protected IAVLNode max;
 
 	
   /**
