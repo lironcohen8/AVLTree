@@ -349,7 +349,7 @@ public class AVLTreeTest {
 		  else if (rankDiff(p, rightChild) == 2) {// 0,2
 			  if (rankDiff(leftChild, leftLeftChild) == 1 && rankDiff(leftChild, leftRightChild) == 2) // 1,2 right rotation 
 				  return demote(p) + rightRotate(p, leftChild);
-			  else // 2,1 leftRight rotation
+			  else if (rankDiff(leftChild, leftLeftChild) == 2 && rankDiff(leftChild, leftRightChild) == 1) // 2,1 leftRight rotation
 				  return demote(leftChild) + demote(p) + promote(leftRightChild) + leftRightRotate(leftChild, leftRightChild); 
 		  }
 	  }
@@ -360,11 +360,10 @@ public class AVLTreeTest {
 		  else if (rankDiff(p, leftChild) == 2) {// 2,0
 			  if (rankDiff(rightChild, rightLeftChild) == 2 && rankDiff(rightChild, rightRightChild) == 1) // 2,1 left rotation 
 				  return demote(p) + leftRotate(p, rightChild);
-			  else // 1,2 rightLeft rotation
+			  else if (rankDiff(rightChild, rightLeftChild) == 1 && rankDiff(rightChild, rightRightChild) == 2) // 1,2 rightLeft rotation
 				  return demote(rightChild) + demote(p) + promote(rightLeftChild) + rightLeftRotate(rightChild, rightLeftChild); 
 		  }
-	  }
-		  
+	  }  
 	  return 0; // no rebalancing operations were taken
   }
   
@@ -513,8 +512,10 @@ public class AVLTreeTest {
  		  else if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 2 // 2,1
 				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1) 
 			  return demote(p) + demote(p) + leftRotate(p, rightChild) + rebalanceDelete((AVLNode)p.getParent());
- 		  else return demote(p) + demote(p) + demote(rightChild) + promote((AVLNode)rightChild.getLeft()) 
- 				  + rightLeftRotate(rightChild, (AVLNode)rightChild.getLeft()); // 1,2
+ 		  else if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 1 // 1,2
+				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 2) 
+ 			  return demote(p) + demote(p) + demote(rightChild) + promote((AVLNode)rightChild.getLeft()) 
+ 				  + rightLeftRotate(rightChild, (AVLNode)rightChild.getLeft()) + rebalanceDelete((AVLNode)p.getParent()); // 1,2
  	  }
  	 else if (rankDiff(p, leftChild) == 1 && rankDiff(p, rightChild) == 3) {// rank differences 1,3
 		  if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,1
@@ -523,8 +524,10 @@ public class AVLTreeTest {
 		  else if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,2
 				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 2) 
 			  return demote(p) + demote(p) + rightRotate(p, leftChild) + rebalanceDelete((AVLNode)p.getParent());
-		  else return demote(p) + demote(p) + demote(leftChild) + promote((AVLNode)leftChild.getRight()) 
-			  	+ leftRightRotate(leftChild, (AVLNode)leftChild.getRight()); // 2,1 
+		  else if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 2 // 2,1
+				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 1) 
+			  return demote(p) + demote(p) + demote(leftChild) + promote((AVLNode)leftChild.getRight()) 
+			  	+ leftRightRotate(leftChild, (AVLNode)leftChild.getRight()) + rebalanceDelete((AVLNode)p.getParent()); // 2,1 
 	  }
  	  return 0; // no rebalancing operation was taken
    }
