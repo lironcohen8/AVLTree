@@ -3,6 +3,8 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
+import AVLTree.IAVLNode;
+
 /**
  *
  * AVLTree
@@ -14,6 +16,8 @@ import java.util.Stack;
 
 public class AVLTreeTest {
 	private IAVLNode root;
+	private IAVLNode min;
+	private IAVLNode max;
 
 	
   /**
@@ -24,6 +28,8 @@ public class AVLTreeTest {
    */
   public AVLTreeTest() {
 	  this.root = null;
+	  this.min = null;
+	  this.max = null;
   }
 	
 	
@@ -87,13 +93,7 @@ public class AVLTreeTest {
    */
   public String min()
   {
-	   IAVLNode node = this.root;
-	   if (node == null)
-		   return null;
-	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
-		   node = node.getLeft();
-	   }
-	   return node.getValue();
+	   return this.min.getValue();
   }
 
   /**
@@ -104,14 +104,43 @@ public class AVLTreeTest {
    */
   public String max()
   {
+	  return this.max.getValue();
+  }
+  
+  /**
+   * public void updateMin()
+   *
+   * updates the min attribute of the tree.
+   * 
+   */
+  private void updateMin()
+  {
 	   IAVLNode node = this.root;
 	   if (node == null)
-		   return null;
+		   this.min = null;
+	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
+		   node = node.getLeft();
+	   }
+	   this.min = node;
+  }
+
+  /**
+   * private void updateMax()
+   *
+   * updates the max attribute of the tree.
+   * 
+   */
+  private void updateMax()
+  {
+	   IAVLNode node = this.root;
+	   if (node == null)
+		   this.max = null;
 	   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
 		   node = node.getRight();
 	   }
-	   return node.getValue();
+	   this.max = node;
   }
+
   
  /**
    * public String search(int k)
@@ -377,6 +406,8 @@ public class AVLTreeTest {
 	   AVLNode n = new AVLNode(k, i);
 	   if (this.getRoot() == null) { // if the tree is empty
 		   this.root = n;
+		   this.min = n;
+		   this.max = n;
 		   return 0;
 	   }
 	   int num = insertBST(n); //inserting n according to BST rules
@@ -385,6 +416,12 @@ public class AVLTreeTest {
 	   else {
 		   num = rebalanceInsert((AVLNode)n.getParent()); // rebalancing the tree
 	   }
+	   
+	   if (k < this.min.getKey())
+		   this.min = n;
+	   if (k > this.max.getKey())
+		   this.max = n;
+	   
 	   updateSize(n); // updating the size attribute of the relevant nodes
 	   return num; // return number of rebalancing operations
    }
@@ -548,6 +585,12 @@ public class AVLTreeTest {
 	   AVLNode p = deleteBST(n); // deleting n according to BST rules
 	   int result = rebalanceDelete(p); // rebalancing the tree 
 	   updateSize(p); // updating the size attribute of the relevant nodes
+	   
+	   if (k == this.min.getKey())
+		   updateMin();
+	   if (k == this.max.getKey())
+		   updateMax();
+	   
 	   return result; 
    }
 
