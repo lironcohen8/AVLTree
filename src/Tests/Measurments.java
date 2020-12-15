@@ -2,15 +2,18 @@ package Tests;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Measurments {
 
-	public static long insertionSort(int arr[]) 
+	public static long insertionSort(long arr[]) 
     { 
 		long count = 0;
         int n = arr.length; 
         for (int i = 1; i < n; i++) { 
-            int key = arr[i]; 
+            long key = arr[i]; 
             int j = i - 1; 
   
             /* Move elements of arr[0..i-1], that are 
@@ -26,24 +29,24 @@ public class Measurments {
         return count;
     }
 	
-	public static int[] down(int n) {
-		int[] res = new int[n];
+	public static long[] down(int n) {
+		long[] res = new long[n];
 		for (int i = 0 ; i<n; i++)
-			res[i] = n-i;
+			res[i] = n-i-1;
 		return res;
 	}
 	
-	public static int[] rand(int[] arr) {
+	public static long[] rand(int n) {
 		Random random = new Random();
-//		int[] res = new int[n];
-		for (int i=0; i<arr.length; i++) {
-			int val = random.nextInt(arr.length);
-			arr[i] = val;
+		long[] res = new long[n];
+		for (int i=0; i<n; i++) {
+			int val = random.nextInt(n);
+			res[i] = val;
 			}
-		return arr;
+		return res;
 	}
 	
-	static void printArray(int arr[])
+	static void printArray(long arr[])
     {
         int n = arr.length;
         for (int i = 0; i < n; ++i)
@@ -51,23 +54,35 @@ public class Measurments {
         System.out.println();
     }
 	
+	static long[] sortedArray(int n) {
+		long[] res = new long[n];
+		//Arrays.sort(arr);
+		for (int i=0; i<n; i++) 
+			res[i]=i;
+		return res;
+	}
+	
+	static void part1Array() {
+		for (int i=1; i<11; i++) {
+			long[] randArr = rand(10000*i);
+			long[] randArrSorted = Arrays.copyOf(randArr, 10000*i);
+			System.out.println("rand " + 10000*i + " count: " + insertionSort(randArr));
+			Arrays.sort(randArrSorted);
+			System.out.println(Arrays.equals(randArrSorted, randArr));
+			long[] downArr = down(10000*i);
+			System.out.println("down " + 10000*i + " count: " + insertionSort(downArr));
+			System.out.println(Arrays.equals(downArr, sortedArray(10000*i)));
+		}
+	}
+	
+	
+	static void part1AVL() {
+		
+	}
+	
 public static void main(String[] args)
 {
-	//for (int i=1; i<11; i++) {
-		int i = 1;
-		int[] randArr = new int[10*i];
-		randArr = rand(randArr);
-		System.out.println("before sorting: ");
-		printArray(randArr);
-		System.out.println("rand " + 10000*i + " count: " + insertionSort(randArr));
-		System.out.println("after sorting: ");
-		printArray(randArr);
-
-		int[] downArr = new int[10000*i];
-		downArr = down(10000*i);
-		System.out.println("before sorting: " + Arrays.toString(downArr));
-		System.out.println("down " + 10000*i + " count: " + insertionSort(downArr));
-		System.out.println("after sorting: " + Arrays.toString(downArr));
-	//}
+	part1Array();
+	part1AVL();
 }
 }
