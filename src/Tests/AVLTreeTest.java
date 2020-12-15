@@ -14,8 +14,6 @@ import java.util.Stack;
 
 public class AVLTreeTest {
 	private IAVLNode root;
-	private IAVLNode min;
-	private IAVLNode max;
 
 	
   /**
@@ -26,8 +24,6 @@ public class AVLTreeTest {
    */
   public AVLTreeTest() {
 	  this.root = null;
-	  this.min = null;
-	  this.max = null;
   }
 	
 	
@@ -91,9 +87,14 @@ public class AVLTreeTest {
    */
   public String min()
   {
-	  if (this.min == null)
-		  return null;
-	  return this.min.getValue();
+	  IAVLNode node = this.root;
+	   if (node == null)
+		   return null;
+		else {
+		   while (node.getLeft().getKey() != -1)  // stops on the virtual leaf's parent
+			   node = node.getLeft();
+		   return node.getValue();
+		}
   }
 
   /**
@@ -104,50 +105,16 @@ public class AVLTreeTest {
    */
   public String max()
   {
-	  if (this.min == null)
-		  return null;
-	  return this.max.getValue();
-  }
-  
-  /**
-   * public void updateMin()
-   *
-   * updates the min attribute of the tree.
-   * 
-   */
-  private void updateMin()
-  {
-	   IAVLNode node = this.root;
+	  IAVLNode node = this.root;
 	   if (node == null)
-		   this.min = null;
+		   return null;
 	   else {
-		   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
-			   node = node.getLeft();
-		   }
-		   this.min = node;
-	   }
-  }
-
-  /**
-   * private void updateMax()
-   *
-   * updates the max attribute of the tree.
-   * 
-   */
-  private void updateMax()
-  {
-	   IAVLNode node = this.root;
-	   if (node == null)
-		   this.max = null;
-	   else {
-		   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
+		   while (node.getRight().getKey() != -1)  // stops on the virtual leaf's parent
 			   node = node.getRight();
-		   }
-		   this.max = node;
+		   return node.getValue();
 	   }
   }
-
-  
+    
  /**
    * public String search(int k)
    *
@@ -304,6 +271,8 @@ public class AVLTreeTest {
    * The method returns 1 for rotation
    */
   private int leftRotate(AVLNode z, AVLNode n) {
+	  if (n.getKey() == -1)
+		  System.out.println(z.getHeight() + " " + z.getLeft().getHeight() + " " + z.getRight().getHeight() );
 	  if(z == null) 
 		  return 0;
 	  
@@ -379,7 +348,7 @@ public class AVLTreeTest {
 				  return promote(p) + rebalanceInsert((AVLNode)p.getParent());
 		  else if (rankDiff(p, rightChild) == 2) {// 0,2
 			  if (rankDiff(leftChild, leftLeftChild) == 1 && rankDiff(leftChild, leftRightChild) == 2) // 1,2 right rotation 
-				  return rightRotate(p, leftChild) + demote(p);
+				  return demote(p) + rightRotate(p, leftChild);
 			  else // 2,1 leftRight rotation
 				  return demote(leftChild) + demote(p) + promote(leftRightChild) + leftRightRotate(leftChild, leftRightChild); 
 		  }
@@ -390,7 +359,7 @@ public class AVLTreeTest {
 			  return promote(p) + rebalanceInsert((AVLNode)p.getParent());
 		  else if (rankDiff(p, leftChild) == 2) {// 2,0
 			  if (rankDiff(rightChild, rightLeftChild) == 2 && rankDiff(rightChild, rightRightChild) == 1) // 2,1 left rotation 
-				  return leftRotate(p, rightChild) + demote(p);
+				  return demote(p) + leftRotate(p, rightChild);
 			  else // 1,2 rightLeft rotation
 				  return demote(rightChild) + demote(p) + promote(rightLeftChild) + rightLeftRotate(rightChild, rightLeftChild); 
 		  }
@@ -412,8 +381,6 @@ public class AVLTreeTest {
 	   AVLNode n = new AVLNode(k, i);
 	   if (this.getRoot() == null) { // if the tree is empty
 		   this.root = n;
-		   this.min = n;
-		   this.max = n;
 		   return 0;
 	   }
 	   int num = insertBST(n); //inserting n according to BST rules
@@ -421,11 +388,6 @@ public class AVLTreeTest {
 		   return -1;
 	   else 
 		   num = rebalanceInsert((AVLNode)n.getParent()); // rebalancing the tree
-	   
-	   if (k < this.min.getKey())
-		   this.min = n;
-	   if (k > this.max.getKey())
-		   this.max = n;
 	   
 	   updateSize(n); // updating the size attribute of the relevant nodes
 	   return num; // return number of rebalancing operations
@@ -591,11 +553,6 @@ public class AVLTreeTest {
 	   int result = rebalanceDelete(p); // rebalancing the tree 
 	   updateSize(p); // updating the size attribute of the relevant nodes
 	   
-	   if (k == this.min.getKey())
-		   updateMin();
-	   if (k == this.max.getKey())
-		   updateMax();
-	   
 	   return result; 
    }
 
@@ -719,10 +676,6 @@ public class AVLTreeTest {
 	   }
 	   T1.rebalanceInsert((AVLNode)n.getLeft().getParent());
 	   T2.rebalanceInsert((AVLNode)n.getRight().getParent());
-	   T1.updateMin();
-	   T1.updateMax();
-	   T1.updateMin();
-	   T1.updateMax();
 	   AVLTreeTest[] result = {T1,T2}; 
 	   return result;
    }
@@ -834,8 +787,6 @@ public class AVLTreeTest {
 			   rebalanceInsert((AVLNode)y.getParent());
 		   }
 	   }
-	  updateMin();
-	  updateMax();
 	  updateSize((AVLNode)x); //updating the size attribute of the relevant nodes; 
 	  return Math.abs(this.getRank() - t.getRank()) + 1;
    }
