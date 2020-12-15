@@ -86,13 +86,14 @@ public class AVLTree {
    */
   public String min()
   {
-	   IAVLNode node = this.root;
+	  IAVLNode node = this.root;
 	   if (node == null)
 		   return null;
-	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
-		   node = node.getLeft();
-	   }
-	   return node.getValue();
+		else {
+		   while (node.getLeft().getKey() != -1)  // stops on the virtual leaf's parent
+			   node = node.getLeft();
+		   return node.getValue();
+		}
   }
 
   /**
@@ -103,15 +104,16 @@ public class AVLTree {
    */
   public String max()
   {
-	   IAVLNode node = this.root;
+	  IAVLNode node = this.root;
 	   if (node == null)
 		   return null;
-	   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
-		   node = node.getRight();
+	   else {
+		   while (node.getRight().getKey() != -1)  // stops on the virtual leaf's parent
+			   node = node.getRight();
+		   return node.getValue();
 	   }
-	   return node.getValue();
   }
-  
+    
  /**
    * public String search(int k)
    *
@@ -268,6 +270,8 @@ public class AVLTree {
    * The method returns 1 for rotation
    */
   private int leftRotate(AVLNode z, AVLNode n) {
+	  if (n.getKey() == -1)
+		  System.out.println(z.getHeight() + " " + z.getLeft().getHeight() + " " + z.getRight().getHeight() );
 	  if(z == null) 
 		  return 0;
 	  
@@ -343,8 +347,8 @@ public class AVLTree {
 				  return promote(p) + rebalanceInsert((AVLNode)p.getParent());
 		  else if (rankDiff(p, rightChild) == 2) {// 0,2
 			  if (rankDiff(leftChild, leftLeftChild) == 1 && rankDiff(leftChild, leftRightChild) == 2) // 1,2 right rotation 
-				  return rightRotate(p, leftChild) + demote(p);
-			  else // 2,1 leftRight rotation
+				  return demote(p) + rightRotate(p, leftChild);
+			  else if (rankDiff(leftChild, leftLeftChild) == 2 && rankDiff(leftChild, leftRightChild) == 1) // 2,1 leftRight rotation
 				  return demote(leftChild) + demote(p) + promote(leftRightChild) + leftRightRotate(leftChild, leftRightChild); 
 		  }
 	  }
@@ -354,12 +358,11 @@ public class AVLTree {
 			  return promote(p) + rebalanceInsert((AVLNode)p.getParent());
 		  else if (rankDiff(p, leftChild) == 2) {// 2,0
 			  if (rankDiff(rightChild, rightLeftChild) == 2 && rankDiff(rightChild, rightRightChild) == 1) // 2,1 left rotation 
-				  return leftRotate(p, rightChild) + demote(p);
-			  else // 1,2 rightLeft rotation
+				  return demote(p) + leftRotate(p, rightChild);
+			  else if (rankDiff(rightChild, rightLeftChild) == 1 && rankDiff(rightChild, rightRightChild) == 2) // 1,2 rightLeft rotation
 				  return demote(rightChild) + demote(p) + promote(rightLeftChild) + rightLeftRotate(rightChild, rightLeftChild); 
 		  }
-	  }
-		  
+	  }  
 	  return 0; // no rebalancing operations were taken
   }
   
@@ -381,9 +384,9 @@ public class AVLTree {
 	   int num = insertBST(n); //inserting n according to BST rules
 	   if (num == -1) // if the key already exists in tree
 		   return -1;
-	   else {
+	   else 
 		   num = rebalanceInsert((AVLNode)n.getParent()); // rebalancing the tree
-	   }
+	   
 	   updateSize(n); // updating the size attribute of the relevant nodes
 	   return num; // return number of rebalancing operations
    }
@@ -508,8 +511,10 @@ public class AVLTree {
  		  else if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 2 // 2,1
 				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 1) 
 			  return demote(p) + demote(p) + leftRotate(p, rightChild) + rebalanceDelete((AVLNode)p.getParent());
- 		  else return demote(p) + demote(p) + demote(rightChild) + promote((AVLNode)rightChild.getLeft()) 
- 				  + rightLeftRotate(rightChild, (AVLNode)rightChild.getLeft()); // 1,2
+ 		  else if (rankDiff(rightChild, (AVLNode)rightChild.getLeft()) == 1 // 1,2
+				  && rankDiff(rightChild, (AVLNode)rightChild.getRight()) == 2) 
+ 			  return demote(p) + demote(p) + demote(rightChild) + promote((AVLNode)rightChild.getLeft()) 
+ 				  + rightLeftRotate(rightChild, (AVLNode)rightChild.getLeft()) + rebalanceDelete((AVLNode)p.getParent()); // 1,2
  	  }
  	 else if (rankDiff(p, leftChild) == 1 && rankDiff(p, rightChild) == 3) {// rank differences 1,3
 		  if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,1
@@ -518,8 +523,10 @@ public class AVLTree {
 		  else if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 1 // 1,2
 				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 2) 
 			  return demote(p) + demote(p) + rightRotate(p, leftChild) + rebalanceDelete((AVLNode)p.getParent());
-		  else return demote(p) + demote(p) + demote(leftChild) + promote((AVLNode)leftChild.getRight()) 
-			  	+ leftRightRotate(leftChild, (AVLNode)leftChild.getRight()); // 2,1 
+		  else if (rankDiff(leftChild, (AVLNode)leftChild.getLeft()) == 2 // 2,1
+				  && rankDiff(leftChild, (AVLNode)leftChild.getRight()) == 1) 
+			  return demote(p) + demote(p) + demote(leftChild) + promote((AVLNode)leftChild.getRight()) 
+			  	+ leftRightRotate(leftChild, (AVLNode)leftChild.getRight()) + rebalanceDelete((AVLNode)p.getParent()); // 2,1 
 	  }
  	  return 0; // no rebalancing operation was taken
    }
@@ -547,6 +554,7 @@ public class AVLTree {
 	   AVLNode p = deleteBST(n); // deleting n according to BST rules
 	   int result = rebalanceDelete(p); // rebalancing the tree 
 	   updateSize(p); // updating the size attribute of the relevant nodes
+	   
 	   return result; 
    }
 
@@ -893,4 +901,158 @@ public class AVLTree {
 	    	return this.size;
 	    }
   }
+
+public static void main(String args[]) {
+	/*boolean isRand = false;
+	boolean insert = false;
+	if (isRand) {
+		int n = 50;
+		printableTree tree = new printableTree();
+		Random rand = new Random();
+		for (int i=0; i<10; i++) {
+			int val = rand.nextInt(n);
+			System.out.println("number is : " + val);
+			String info = Integer.toString(val);
+			tree.insert(val, info);
+			tree.printTree();
+			System.out.println();
+			}
+	}
+	else if (insert) {
+		printableTree tree = new printableTree();
+		int[] arr = {8,4,9,3,10,11,13};
+		for (int val : arr) {
+			//System.out.println("number is : " + val);
+			String info = Integer.toString(val);
+			tree.insert(val, info);
+			tree.printTree();
+			//System.out.println();
+			}
+		/*System.out.println("deleting 8:");
+		tree.delete(8);
+		tree.printTree();
+		System.out.println("deleting 9:");
+		tree.delete(9);
+		tree.printTree();
+		String[] array = tree.infoToArray();
+		System.out.println(Arrays.toString(array));
+	}
+	
+	boolean join = false;
+	if (join) {
+		printableTree tree = new printableTree();
+		int[] arr = {1};
+		for (int val : arr) {
+			//System.out.println("number is : " + val);
+			String info = Integer.toString(val);
+			tree.insert(val, info);
+			//tree.printTree();
+			//System.out.println();
+			}
+		System.out.println();
+		tree.printTree();
+			
+		printableTree tree2 = new printableTree();
+			int[] arr2 = {3,4,5,6,7,8,9};
+			for (int val2 : arr2) {
+				//System.out.println("number is : " + val2);
+				String info2 = Integer.toString(val2);
+				tree2.insert(val2, info2);
+				//tree2.printTree();
+				//System.out.println();		
+			}
+			System.out.println();
+			tree2.printTree();
+			
+			AVLTreeTest dummy = new AVLTreeTest();
+			dummy.insert(2, "2");
+			AVLTreeTest tree2new = (AVLTreeTest)tree2;
+			tree2new.join(dummy.getRoot(), (AVLTreeTest)tree);
+			
+			tree2.printTree();
+	}
+	
+	boolean split = true;
+	if (split) {
+		printableTree tree2 = new printableTree();
+		int[] arr2 = {3,4,5,6,7,8,9};
+		for (int val2 : arr2) {
+			//System.out.println("number is : " + val2);
+			String info2 = Integer.toString(val2);
+			tree2.insert(val2, info2);
+			//tree2.printTree();
+			//System.out.println();		
+		}
+		System.out.println();
+		tree2.printTree();
+		
+		AVLTreeTest[] arr = tree2.split(8);
+		System.out.println(arr[0].size());
+		System.out.println(Arrays.toString(arr[0].keysToArray()));
+		System.out.println(Arrays.toString(arr[1].keysToArray()));
+	}
+	printableTree tree4 = new printableTree();
+	 int[] values = new int[]{16, 24, 36, 19, 44, 28, 61}; //74}; 83, 64, 52, 65, 86, 93, 88};
+     for (int val : values) {
+         tree4.insert(val, "" + val);
+ 		tree4.printTree();
+
+     }
+     tree4.printTree();
+	
+     printableTree tree5 = new printableTree();
+	 int[] values5 = new int[]{99, 9, 200, 5, 50, 300, 3, 12, 60};
+     for (int val : values5) {
+         tree5.insert(val, "" + val);
+     }
+	tree5.printTree();
+	tree5.delete(99);
+	tree5.printTree();
+	
+	printableTree tree6 = new printableTree();
+	for (int i=0 ; i<100; i++)
+		tree6.insert(i, ""+i);
+	for (int j=0 ; j<50; j++)
+		tree6.delete(j);
+	tree6.delete(90);
+	tree6.delete(91);
+	tree6.delete(92);
+	System.out.println("before deleting 93");
+	tree6.printTree();
+	tree6.delete(93);
+	System.out.println("after deleting 93");
+	tree6.printTree();
+	
+	printableTree tree7 = new printableTree();
+	int[] values7 = new int[]{1,2,3,4,5,6,7};
+    for (int val : values7) {
+        tree7.insert(val, "" + val);
+    }
+    printableTree tree8 = new printableTree();
+    int[] values8 = new int[]{9,10,11,12,13,14,15};
+    for (int val : values8) {
+        tree8.insert(val, "" + val);
+    }
+    System.out.println(tree7.getRank());
+    System.out.println(tree8.getRank());
+    AVLTreeTest dummy = new AVLTreeTest();
+	dummy.insert(8, "8");
+    tree7.join(dummy.root, tree8);
+    System.out.println("tree7 size " + tree7.size());
+    tree7.printTree();*/
+	
+	printableTree tree7 = new printableTree();
+	int[] values7 = new int[]{1,2,3,4,5,6,7};
+    for (int val : values7) {
+        tree7.insert(val, "" + val);
+    }
+    //tree7.printTree();
+    //System.out.println(tree7.size());
+    tree7.printTree();
+    tree7.delete(4);
+    System.out.println(tree7.size());
+    tree7.printTree();
+	
+	
+}
 }
