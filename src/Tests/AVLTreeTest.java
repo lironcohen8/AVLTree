@@ -271,8 +271,6 @@ public class AVLTreeTest {
    * The method returns 1 for rotation
    */
   private int leftRotate(AVLNode z, AVLNode n) {
-	  if (n.getKey() == -1)
-		  System.out.println(z.getHeight() + " " + z.getLeft().getHeight() + " " + z.getRight().getHeight() );
 	  if(z == null) 
 		  return 0;
 	  
