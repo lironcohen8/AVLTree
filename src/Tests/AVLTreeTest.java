@@ -691,14 +691,10 @@ public class AVLTreeTest {
 	   if (n.getLeft().getKey() != -1) {
 		   T1.root = n.getLeft(); // Initialising the smaller tree
 		   T1.root.setParent(null);
-		   T1.updateMin();
-		   T1.updateMax();
 	   }
 	   if (n.getRight().getKey() != -1) {
 		   T2.root = n.getRight(); // Initialising the bigger tree
 		   T2.root.setParent(null);
-		   T2.updateMin();
-		   T2.updateMax();
 	   }
 	   
 	   AVLNode cur = n;
@@ -708,8 +704,6 @@ public class AVLTreeTest {
 			   temp.root.setParent(null);
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
-			   temp.updateMin();
-			   temp.updateMax();
 			   AVLNode y = clone((AVLNode)cur.getParent());
 			   T1.join(y, temp);
 		   }
@@ -718,8 +712,6 @@ public class AVLTreeTest {
 			   temp.root.setParent(null);
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
-			   temp.updateMin();
-			   temp.updateMax();
 			   AVLNode y = clone((AVLNode)cur.getParent());
 			   T2.join(y, temp);
 		   }
@@ -727,6 +719,10 @@ public class AVLTreeTest {
 	   }
 	   T1.rebalanceInsert((AVLNode)n.getLeft().getParent());
 	   T2.rebalanceInsert((AVLNode)n.getRight().getParent());
+	   T1.updateMin();
+	   T1.updateMax();
+	   T1.updateMin();
+	   T1.updateMax();
 	   AVLTreeTest[] result = {T1,T2}; 
 	   return result;
    }
