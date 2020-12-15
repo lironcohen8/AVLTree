@@ -91,7 +91,9 @@ public class AVLTreeTest {
    */
   public String min()
   {
-	   return this.min.getValue();
+	  if (this.min == null)
+		  return null;
+	  return this.min.getValue();
   }
 
   /**
@@ -102,6 +104,8 @@ public class AVLTreeTest {
    */
   public String max()
   {
+	  if (this.min == null)
+		  return null;
 	  return this.max.getValue();
   }
   
@@ -116,10 +120,12 @@ public class AVLTreeTest {
 	   IAVLNode node = this.root;
 	   if (node == null)
 		   this.min = null;
-	   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
-		   node = node.getLeft();
+	   else {
+		   while (node.getLeft().getKey() != -1) { // stops on the virtual leaf's parent
+			   node = node.getLeft();
+		   }
+		   this.min = node;
 	   }
-	   this.min = node;
   }
 
   /**
@@ -133,10 +139,12 @@ public class AVLTreeTest {
 	   IAVLNode node = this.root;
 	   if (node == null)
 		   this.max = null;
-	   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
-		   node = node.getRight();
+	   else {
+		   while (node.getRight().getKey() != -1) { // stops on the virtual leaf's parent
+			   node = node.getRight();
+		   }
+		   this.max = node;
 	   }
-	   this.max = node;
   }
 
   
@@ -411,9 +419,8 @@ public class AVLTreeTest {
 	   int num = insertBST(n); //inserting n according to BST rules
 	   if (num == -1) // if the key already exists in tree
 		   return -1;
-	   else {
+	   else 
 		   num = rebalanceInsert((AVLNode)n.getParent()); // rebalancing the tree
-	   }
 	   
 	   if (k < this.min.getKey())
 		   this.min = n;
@@ -684,10 +691,14 @@ public class AVLTreeTest {
 	   if (n.getLeft().getKey() != -1) {
 		   T1.root = n.getLeft(); // Initialising the smaller tree
 		   T1.root.setParent(null);
+		   T1.updateMin();
+		   T1.updateMax();
 	   }
 	   if (n.getRight().getKey() != -1) {
 		   T2.root = n.getRight(); // Initialising the bigger tree
 		   T2.root.setParent(null);
+		   T2.updateMin();
+		   T2.updateMax();
 	   }
 	   
 	   AVLNode cur = n;
@@ -697,6 +708,8 @@ public class AVLTreeTest {
 			   temp.root.setParent(null);
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
+			   temp.updateMin();
+			   temp.updateMax();
 			   AVLNode y = clone((AVLNode)cur.getParent());
 			   T1.join(y, temp);
 		   }
@@ -705,6 +718,8 @@ public class AVLTreeTest {
 			   temp.root.setParent(null);
 			   if (temp.root.getKey() == -1)
 				   temp.root = null;
+			   temp.updateMin();
+			   temp.updateMax();
 			   AVLNode y = clone((AVLNode)cur.getParent());
 			   T2.join(y, temp);
 		   }
@@ -823,6 +838,8 @@ public class AVLTreeTest {
 			   rebalanceInsert((AVLNode)y.getParent());
 		   }
 	   }
+	  updateMin();
+	  updateMax();
 	  updateSize((AVLNode)x); //updating the size attribute of the relevant nodes; 
 	  return Math.abs(this.getRank() - t.getRank()) + 1;
    }
