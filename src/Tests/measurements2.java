@@ -2,6 +2,9 @@ package Tests;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
+
+import Tests.AVLTreeTest.IAVLNode;
 
 public class measurements2 {
 
@@ -22,6 +25,5 @@ public class measurements2 {
 			randArr = rand(10000*i);
 			System.out.println(Arrays.toString(randArr));
 		}
-	}
 
-//}
+}
