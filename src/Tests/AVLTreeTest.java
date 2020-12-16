@@ -145,7 +145,7 @@ public class AVLTreeTest {
    * return the place's node parent.
    * if the key exists in tree, returns the existing node with the given key.
    **/
-  private AVLNode treePosition(int k) {
+  protected AVLNode treePosition(int k) {
 	  AVLNode x = (AVLNode)this.getRoot();
 	  AVLNode y = x;
 	  while (x.getKey() != -1) { // until encounters a virtual leaf
@@ -625,7 +625,7 @@ public class AVLTreeTest {
    *
    * gets a node and a returns a clone node that has the node's key, value and height, without parent and children
    */
-  private AVLNode clone(AVLNode n) {
+  protected AVLNode clone(AVLNode n) {
 	  AVLNode res = new AVLNode(n.getKey(), n.getValue());
 	  res.setHeight(n.getHeight());
 	  return res;

@@ -88,7 +88,7 @@ public class Measurments {
 			FSAVLTree t1 = new FSAVLTree();
 			count1 = t1.insertToTree(randArr);
 			//long[] randArrSorted = Arrays.copyOf(randArr, 10000*i);
-			System.out.println("AVL rand: " + 10000*i + " count: " + count1);
+			System.out.println("AVL rand " + 10000*i + " count: " + count1);
 			//Arrays.sort(randArrSorted);
 			//System.out.println(Arrays.equals(randArrSorted, randArr));
 			
@@ -172,5 +172,64 @@ public static class FSAVLTree extends AVLTreeTest {
 			this.maxNode = n;
  	   return num; // return number of rebalancing operations
     }
+    
+    @Override
+    protected AVLNode clone(AVLNode n) {
+  	  AVLNode res = new AVLNode(n.getKey(), n.getValue());
+  	  res.setHeight(n.getHeight());
+  	  return res;
+    }   
+    
+    @Override
+    public AVLTreeTest[] split(int x) {
+    	long sum = 0;
+    	long count = 0;
+    	long maxSum = 0;
+    	
+ 	   AVLTreeTest T1 = new AVLTreeTest(); // tree with smaller keys
+ 	   AVLTreeTest T2 = new AVLTreeTest(); // tree with bigger keys
+ 	   AVLTreeTest temp = new AVLTreeTest();
+ 	   
+ 	   AVLNode n = treePosition(x); // finding x's node
+ 	   if (n.getLeft().getKey() != -1) {
+ 		   T1.root = n.getLeft(); // Initialising the smaller tree
+ 		   T1.root.setParent(null);
+ 	   }
+ 	   if (n.getRight().getKey() != -1) {
+ 		   T2.root = n.getRight(); // Initialising the bigger tree
+ 		   T2.root.setParent(null);
+ 	   }
+ 	   
+ 	   AVLNode cur = n;
+ 	   while (cur.getParent() != null) {
+ 		   if (cur.getParent().getRight() == cur) {// if cur is a right child			   
+ 			   temp.root = cur.getParent().getLeft();
+ 			   temp.root.setParent(null);
+ 			   if (temp.root.getKey() == -1)
+ 				   temp.root = null;
+ 			   AVLNode y = clone((AVLNode)cur.getParent());
+ 			   sum += T1.join(y, temp);
+ 			   count++;
+ 		   }
+ 		   else { // if cur is a left child
+ 			   temp.root = cur.getParent().getRight();
+ 			   temp.root.setParent(null);
+ 			   if (temp.root.getKey() == -1)
+ 				   temp.root = null;
+ 			   AVLNode y = clone((AVLNode)cur.getParent());
+ 			   sum += T2.join(y, temp);
+ 			   count++;
+ 		   }
+ 		   cur = (AVLNode)cur.getParent();
+ 	   }
+ 	   if (sum > maxSum)
+ 		   maxSum = sum;
+ 	   System.out.println("splitting over " + x + ", count = " + count + ", sum = " + sum + ", maxSum = " + maxSum);
+ 	   T1.rebalanceInsert((AVLNode)n.getLeft().getParent());
+ 	   T2.rebalanceInsert((AVLNode)n.getRight().getParent());
+ 	   AVLTreeTest[] result = {T1,T2}; 
+ 	   return result;
+    }
+    
 }
 }
