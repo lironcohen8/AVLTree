@@ -13,7 +13,7 @@ import java.util.Stack;
  */
 
 public class AVLTreeTest {
-	private IAVLNode root;
+	public IAVLNode root;
 
 	
   /**
@@ -167,7 +167,7 @@ public class AVLTreeTest {
    * The method doesn't rebalance the tree.
    * The method return -1 if the key existed in tree before inserting, and 1 if the insertion succeeded.
    */
-  private int insertBST(AVLNode n) {
+  public int insertBST(AVLNode n) {
 	AVLNode y = treePosition(n.getKey()); // return the parent of the new node
 	n.setParent(y); // set the new node's parent
 	n.setHeight(0); // making sure the height of the new node is 0
@@ -198,7 +198,7 @@ public class AVLTreeTest {
    *
    * The method gets a node and updates its and all its parents' size attribute. 
    */
-  private void updateSize(AVLNode n) {
+  protected void updateSize(AVLNode n) {
 	  AVLNode cur = n;
 	  while (cur != null) {
 		  AVLNode curLeft = (AVLNode)cur.getLeft();
@@ -330,7 +330,7 @@ public class AVLTreeTest {
    * The method calls promote and rotations if needed.
    * The method returns sum of rebalancing operations that were taken.
    */   
-  private int rebalanceInsert(AVLNode p) {
+  protected int rebalanceInsert(AVLNode p) {
 	  if (p == null)
 		  return 0;
 	  
@@ -820,14 +820,14 @@ public class AVLTreeTest {
    * (It must implement IAVLNode)
    */
   public class AVLNode implements IAVLNode{
-	  	private int key; // the key of the node
-	  	private String info; // the value of the node
-	  	private IAVLNode parent; // a reference to the node's parent
-	  	private IAVLNode left; // a reference to the node's left son
-	  	private IAVLNode right; // a reference to the node's right son
-	  	private boolean isReal; // if the node is real or virtual 
-	  	private int height; // keeps the node's height in the tree
-	  	private int size; // keeps the node's subtree size
+	  	public Integer key; // the key of the node
+	  	public String info; // the value of the node
+	  	public IAVLNode parent; // a reference to the node's parent
+	  	public IAVLNode left; // a reference to the node's left son
+	  	public IAVLNode right; // a reference to the node's right son
+	  	public boolean isReal; // if the node is real or virtual 
+	  	public int height; // keeps the node's height in the tree
+	  	public int size; // keeps the node's subtree size
 	  	
 	  	public AVLNode(int key, String info) 
 	  	{
