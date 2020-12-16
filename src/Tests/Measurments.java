@@ -3,6 +3,7 @@ package Tests;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import Tests.AVLTreeTest.AVLNode;
 
@@ -37,7 +38,7 @@ public class Measurments {
 		return res;
 	}
 	
-	public static Integer[] randArray(Integer n) {
+	public static Integer[] shuffleArray(Integer n) {
 		Integer[] arr = new Integer[n];
 
         for (int i = 0; i < n; i++) {
@@ -50,6 +51,7 @@ public class Measurments {
         
         return arr;
 	}
+
 	
 	static void printArray(Integer[] arr)
     {
@@ -69,7 +71,7 @@ public class Measurments {
 	
 	static void part1Array () {
 		for (int i=1; i<11; i++) {
-			Integer[] randArr = randArray(10000*i);
+			Integer[] randArr = shuffleArray(10000*i);
 			//long[] randArrSorted = Arrays.copyOf(randArr, 10000*i);
 			System.out.println("Array rand " + 10000*i + " count: " + insertionSort(randArr));
 			//Arrays.sort(randArrSorted);
@@ -84,7 +86,7 @@ public class Measurments {
 	static void part1AVL() {
 		for (int i=1; i<11; i++) {
 			long count1 = 0;
-			Integer[] randArr = randArray(10000*i);
+			Integer[] randArr = shuffleArray(10000*i);
 			FSAVLTree t1 = new FSAVLTree();
 			count1 = t1.insertToTree(randArr);
 			//long[] randArrSorted = Arrays.copyOf(randArr, 10000*i);
@@ -101,64 +103,43 @@ public class Measurments {
 		}
 	}
 	
+	
+	static void part2RandomSplit() {
+		Random rand = new Random();
+		for (int i=1; i<11; i++) {
+			Integer[] randArr = shuffleArray(10000*i);
+			NoFSAVLTree t1 = new NoFSAVLTree();
+			t1.insertToTreeNoFS(randArr);
+			int randomKey = rand.nextInt(10000*i);
+			t1.split(randomKey);
+		}
+	}
+	
 public static void main(String[] args)
 {
 	System.out.println("~~~ Part 1 ~~~");
-	part1Array();
-	part1AVL();
+	//part1Array();
+	//part1AVL();
+	System.out.println("~~~ Part 2 ~~~");
+	part2RandomSplit();
+	//part2LeftMaxSplit();
 }
 
-public static class FSAVLTree extends AVLTreeTest {
-	protected AVLNode maxNode;
-	
-	public FSAVLTree() {
+public static class NoFSAVLTree extends AVLTreeTest {
+	public NoFSAVLTree() {
 		super();
-		this.maxNode = null;
 	}
 	
-	private long insertPosition(int key) {
-    	long count = 0;
-    	AVLNode maxNode = this.maxNode;
-
-        while ((maxNode.getKey() > key) && (maxNode != this.root)) {
-            count += 1;
-            maxNode = (AVLNode) maxNode.getParent();
-        }
-
-        AVLNode x = maxNode;
-        AVLNode y = x;
-        while (x.isRealNode()) {
-            count += 1;
-            y = x;
-            if (key == x.getKey()) {
-                return count;
-            } else {
-                if (key < x.getKey()) {
-                    x = (AVLNode) x.getLeft();
-                } else {
-                    x = (AVLNode) x.getRight();
-                }
-            }
-        }
-        return 0;
-    }
-    
-    private long insertToTree(Integer[] arr) {
-    	long count = 0;
-    	FSAVLTree t = new FSAVLTree();    	
+	private void insertToTreeNoFS(Integer[] arr) {    	
     	for (int num : arr) {
-    		t.insert(num, ""+num);
-    		count += t.insertPosition(num);
+    		this.insertNoFS(num, ""+num);
     	}
-    	return count;
     }
     
-    @Override
-    public int insert(int k, String i) {
+    public int insertNoFS(int k, String i) {
  	   AVLNode n = new AVLNode(k, i);
  	   if (this.getRoot() == null) { // if the tree is empty
  		   this.root = n;
- 		   this.maxNode = n;
  		   return 0;
  	   }
  	   int num = insertBST(n); //inserting n according to BST rules
@@ -168,8 +149,6 @@ public static class FSAVLTree extends AVLTreeTest {
  		   num = rebalanceInsert((AVLNode)n.getParent()); // rebalancing the tree
  	   
  	   updateSize(n); // updating the size attribute of the relevant nodes
- 	  if (k > this.maxNode.getKey())
-			this.maxNode = n;
  	   return num; // return number of rebalancing operations
     }
     
@@ -178,7 +157,7 @@ public static class FSAVLTree extends AVLTreeTest {
   	  AVLNode res = new AVLNode(n.getKey(), n.getValue());
   	  res.setHeight(n.getHeight());
   	  return res;
-    }   
+    }
     
     @Override
     public AVLTreeTest[] split(int x) {
@@ -230,6 +209,78 @@ public static class FSAVLTree extends AVLTreeTest {
  	   AVLTreeTest[] result = {T1,T2}; 
  	   return result;
     }
+    
+    
+}
+
+
+public static class FSAVLTree extends AVLTreeTest {
+	protected AVLNode maxNode;
+	
+	public FSAVLTree() {
+		super();
+		this.maxNode = null;
+	}
+	
+	private long insertPosition(int key) {
+    	long count = 0;
+    	AVLNode maxNode = this.maxNode;
+
+        while ((maxNode.getKey() > key) && (maxNode != this.root)) {
+            count += 1;
+            maxNode = (AVLNode) maxNode.getParent();
+        }
+
+        AVLNode x = maxNode;
+        AVLNode y = x;
+        while (x.isRealNode()) {
+            count += 1;
+            y = x;
+            if (key == x.getKey()) {
+                return count;
+            } else {
+                if (key < x.getKey()) {
+                    x = (AVLNode) x.getLeft();
+                } else {
+                    x = (AVLNode) x.getRight();
+                }
+            }
+        }
+        return 0;
+    }
+    
+    private long insertToTree(Integer[] arr) {
+    	long count = 0;
+    	FSAVLTree t = new FSAVLTree();    	
+    	for (int num : arr) {
+    		t.insert(num, ""+num);
+    		count += t.insertPosition(num);
+    	}
+    	return count;
+    }
+    
+    
+    
+    @Override
+    public int insert(int k, String i) {
+ 	   AVLNode n = new AVLNode(k, i);
+ 	   if (this.getRoot() == null) { // if the tree is empty
+ 		   this.root = n;
+ 		   this.maxNode = n;
+ 		   return 0;
+ 	   }
+ 	   int num = insertBST(n); //inserting n according to BST rules
+ 	   if (num == -1) // if the key already exists in tree
+ 		   return -1;
+ 	   else 
+ 		   num = rebalanceInsert((AVLNode)n.getParent()); // rebalancing the tree
+ 	   
+ 	   updateSize(n); // updating the size attribute of the relevant nodes
+ 	  if (k > this.maxNode.getKey())
+			this.maxNode = n;
+ 	   return num; // return number of rebalancing operations
+    }
+    
     
 }
 }
