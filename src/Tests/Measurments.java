@@ -113,7 +113,6 @@ public class Measurments {
 			t1.insertToTreeNoFS(randArr);
 			int randomKey = rand.nextInt(10000*i);
 			t1.split(randomKey);
-			
 		}
 	}
 	
@@ -202,8 +201,7 @@ public static class NoFSAVLTree extends AVLTreeTest {
  			   if (temp.root.getKey() == -1)
  				   temp.root = null;
  			   AVLNode y = clone((AVLNode)cur.getParent());
- 			   sumJoin += T1.join(y, temp);
- 			   count++;
+ 			   sumJoin = T1.join(y, temp);
  		   }
  		   else { // if cur is a left child
  			   temp.root = cur.getParent().getRight();
@@ -211,16 +209,16 @@ public static class NoFSAVLTree extends AVLTreeTest {
  			   if (temp.root.getKey() == -1)
  				   temp.root = null;
  			   AVLNode y = clone((AVLNode)cur.getParent());
- 			   sumJoin += T2.join(y, temp);
- 			   count++;
+ 			   sumJoin = T2.join(y, temp);
  		   }
  		  if (sumJoin > maxJoin)
  	 		   maxJoin = sumJoin;
  	 	   sum += sumJoin;
+ 	 	   count++;
  		   cur = (AVLNode)cur.getParent();
  	   }
  	   
- 	   System.out.println("splitting over " + x + ", count = " + count + ", sum = " + sum + ", maxJoin = " + maxJoin + ", avg join cost = " + sum/count);
+ 	   System.out.println("splitting over " + x + ", count = " + count + ", sum = " + sum + ", maxJoin = " + maxJoin + ", avg join cost = " + sum/(double)count);
  	   T1.rebalanceInsert((AVLNode)n.getLeft().getParent());
  	   T2.rebalanceInsert((AVLNode)n.getRight().getParent());
  	   AVLTreeTest[] result = {T1,T2}; 

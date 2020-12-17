@@ -708,6 +708,7 @@ public class AVLTree {
     * postcondition: none
     */   
    public int join(IAVLNode x, AVLTree t) {
+	   int res = Math.abs(this.getRank() - t.getRank()) + 1;
 	   if (t.getRoot() == null && this.getRoot() == null) { // both trees are empty
 		   this.insert(x.getKey(), x.getValue());
 	   }
@@ -786,7 +787,7 @@ public class AVLTree {
 		   }
 	   }
 	  updateSize((AVLNode)x); //updating the size attribute of the relevant nodes; 
-	  return Math.abs(this.getRank() - t.getRank()) + 1;
+	  return res;
    }
 
 	/**

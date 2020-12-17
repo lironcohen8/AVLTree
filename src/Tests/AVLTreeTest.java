@@ -711,6 +711,7 @@ public class AVLTreeTest {
     * postcondition: none
     */   
    public int join(IAVLNode x, AVLTreeTest t) {
+	   int res = Math.abs(this.getRank() - t.getRank()) + 1;
 	   if (t.getRoot() == null && this.getRoot() == null) { // both trees are empty
 		   this.insert(x.getKey(), x.getValue());
 	   }
@@ -789,7 +790,7 @@ public class AVLTreeTest {
 		   }
 	   }
 	  updateSize((AVLNode)x); //updating the size attribute of the relevant nodes; 
-	  return Math.abs(this.getRank() - t.getRank()) + 1;
+	  return res;
    }
 
 	/**
@@ -902,8 +903,8 @@ public class AVLTreeTest {
   }
 
 public static void main(String args[]) {
-	/*boolean isRand = false;
-	boolean insert = false;
+	boolean isRand = false;
+	boolean insert = true;
 	if (isRand) {
 		int n = 50;
 		printableTree tree = new printableTree();
@@ -919,7 +920,7 @@ public static void main(String args[]) {
 	}
 	else if (insert) {
 		printableTree tree = new printableTree();
-		int[] arr = {8,4,9,3,10,11,13};
+		int[] arr = {8,4,9,3,10,11,13,15,1,2,7,20,21,22,23,28};
 		for (int val : arr) {
 			//System.out.println("number is : " + val);
 			String info = Integer.toString(val);
@@ -927,6 +928,8 @@ public static void main(String args[]) {
 			tree.printTree();
 			//System.out.println();
 			}
+		System.out.println(tree.getRank());
+	}}
 		/*System.out.println("deleting 8:");
 		tree.delete(8);
 		tree.printTree();
@@ -1038,7 +1041,7 @@ public static void main(String args[]) {
 	dummy.insert(8, "8");
     tree7.join(dummy.root, tree8);
     System.out.println("tree7 size " + tree7.size());
-    tree7.printTree();*/
+    tree7.printTree();
 	
 	printableTree tree7 = new printableTree();
 	int[] values7 = new int[]{1,2,3,4,5,6,7};
@@ -1050,8 +1053,7 @@ public static void main(String args[]) {
     tree7.printTree();
     tree7.delete(4);
     System.out.println(tree7.size());
-    tree7.printTree();
+    tree7.printTree();*/
 	
 	
-}
 }
