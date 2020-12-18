@@ -1,11 +1,9 @@
 package Tests;
-import java.util.Arrays;
-import java.util.Random;
 import java.util.Stack;
 
 /**
  *
- * AVLTree
+ * AVLTreeTest
  *
  * An implementation of a AVL Tree with
  * distinct integer keys and info
@@ -13,13 +11,13 @@ import java.util.Stack;
  */
 
 public class AVLTreeTest {
-	public IAVLNode root;
+	private IAVLNode root;
 
 	
   /**
-   * public AVLTree()
+   * public AVLTreeTest()
    *
-   * constructs an empty AVLTree
+   * constructs an empty AVLTreeTest
    *
    */
   public AVLTreeTest() {
@@ -87,12 +85,12 @@ public class AVLTreeTest {
    */
   public String min()
   {
-	  IAVLNode node = this.root;
+	  AVLNode node = (AVLNode)this.root;
 	   if (node == null)
 		   return null;
 		else {
 		   while (node.getLeft().getKey() != -1)  // stops on the virtual leaf's parent
-			   node = node.getLeft();
+			   node = (AVLNode)node.getLeft();
 		   return node.getValue();
 		}
   }
@@ -145,7 +143,7 @@ public class AVLTreeTest {
    * return the place's node parent.
    * if the key exists in tree, returns the existing node with the given key.
    **/
-  protected AVLNode treePosition(int k) {
+  private AVLNode treePosition(int k) {
 	  AVLNode x = (AVLNode)this.getRoot();
 	  AVLNode y = x;
 	  while (x.getKey() != -1) { // until encounters a virtual leaf
@@ -167,7 +165,7 @@ public class AVLTreeTest {
    * The method doesn't rebalance the tree.
    * The method return -1 if the key existed in tree before inserting, and 1 if the insertion succeeded.
    */
-  public int insertBST(AVLNode n) {
+  private int insertBST(AVLNode n) {
 	AVLNode y = treePosition(n.getKey()); // return the parent of the new node
 	n.setParent(y); // set the new node's parent
 	n.setHeight(0); // making sure the height of the new node is 0
@@ -198,7 +196,7 @@ public class AVLTreeTest {
    *
    * The method gets a node and updates its and all its parents' size attribute. 
    */
-  protected void updateSize(AVLNode n) {
+  private void updateSize(AVLNode n) {
 	  AVLNode cur = n;
 	  while (cur != null) {
 		  AVLNode curLeft = (AVLNode)cur.getLeft();
@@ -330,7 +328,7 @@ public class AVLTreeTest {
    * The method calls promote and rotations if needed.
    * The method returns sum of rebalancing operations that were taken.
    */   
-  protected int rebalanceInsert(AVLNode p) {
+  private int rebalanceInsert(AVLNode p) {
 	  if (p == null)
 		  return 0;
 	  
@@ -625,7 +623,7 @@ public class AVLTreeTest {
    *
    * gets a node and a returns a clone node that has the node's key, value and height, without parent and children
    */
-  protected AVLNode clone(AVLNode n) {
+  private AVLNode clone(AVLNode n) {
 	  AVLNode res = new AVLNode(n.getKey(), n.getValue());
 	  res.setHeight(n.getHeight());
 	  return res;
@@ -682,7 +680,7 @@ public class AVLTreeTest {
    }
    
    /**
-    * private AVLNode findRankEquiv(AVLTree tree, int rank)
+    * private AVLNode findRankEquiv(AVLTreeTest tree, int rank)
     *
     * gets a tree and a rank returns the first left node whose rank is less or equals to given rank.
     */
@@ -703,7 +701,7 @@ public class AVLTreeTest {
 
    
    /**
-    * public join(IAVLNode x, AVLTree t)
+    * public join(IAVLNode x, AVLTreeTest t)
     *
     * joins t and x with the tree. 	
     * Returns the complexity of the operation (|tree.rank - t.rank| + 1).
@@ -814,21 +812,21 @@ public class AVLTreeTest {
    /**
    * public class AVLNode
    *
-   * If you wish to implement classes other than AVLTree
+   * If you wish to implement classes other than AVLTreeTest
    * (for example AVLNode), do it in this file, not in 
    * another file.
    * This class can and must be modified.
    * (It must implement IAVLNode)
    */
   public class AVLNode implements IAVLNode{
-	  	public Integer key; // the key of the node
-	  	public String info; // the value of the node
-	  	public IAVLNode parent; // a reference to the node's parent
-	  	public IAVLNode left; // a reference to the node's left son
-	  	public IAVLNode right; // a reference to the node's right son
-	  	public boolean isReal; // if the node is real or virtual 
-	  	public int height; // keeps the node's height in the tree
-	  	public int size; // keeps the node's subtree size
+	  	private int key; // the key of the node
+	  	private String info; // the value of the node
+	  	private IAVLNode parent; // a reference to the node's parent
+	  	private IAVLNode left; // a reference to the node's left son
+	  	private IAVLNode right; // a reference to the node's right son
+	  	private boolean isReal; // if the node is real or virtual 
+	  	private int height; // keeps the node's height in the tree
+	  	private int size; // keeps the node's subtree size
 	  	
 	  	public AVLNode(int key, String info) 
 	  	{
@@ -902,158 +900,4 @@ public class AVLTreeTest {
 	    }
   }
 
-public static void main(String args[]) {
-	boolean isRand = false;
-	boolean insert = true;
-	if (isRand) {
-		int n = 50;
-		printableTree tree = new printableTree();
-		Random rand = new Random();
-		for (int i=0; i<10; i++) {
-			int val = rand.nextInt(n);
-			System.out.println("number is : " + val);
-			String info = Integer.toString(val);
-			tree.insert(val, info);
-			tree.printTree();
-			System.out.println();
-			}
-	}
-	else if (insert) {
-		printableTree tree = new printableTree();
-		int[] arr = {8,4,9,3,10,11,13,15,1,2,7,20,21,22,23,28};
-		for (int val : arr) {
-			//System.out.println("number is : " + val);
-			String info = Integer.toString(val);
-			tree.insert(val, info);
-			tree.printTree();
-			//System.out.println();
-			}
-		System.out.println(tree.getRank());
-	}}
-		/*System.out.println("deleting 8:");
-		tree.delete(8);
-		tree.printTree();
-		System.out.println("deleting 9:");
-		tree.delete(9);
-		tree.printTree();
-		String[] array = tree.infoToArray();
-		System.out.println(Arrays.toString(array));
-	}
-	
-	boolean join = false;
-	if (join) {
-		printableTree tree = new printableTree();
-		int[] arr = {1};
-		for (int val : arr) {
-			//System.out.println("number is : " + val);
-			String info = Integer.toString(val);
-			tree.insert(val, info);
-			//tree.printTree();
-			//System.out.println();
-			}
-		System.out.println();
-		tree.printTree();
-			
-		printableTree tree2 = new printableTree();
-			int[] arr2 = {3,4,5,6,7,8,9};
-			for (int val2 : arr2) {
-				//System.out.println("number is : " + val2);
-				String info2 = Integer.toString(val2);
-				tree2.insert(val2, info2);
-				//tree2.printTree();
-				//System.out.println();		
-			}
-			System.out.println();
-			tree2.printTree();
-			
-			AVLTreeTest dummy = new AVLTreeTest();
-			dummy.insert(2, "2");
-			AVLTreeTest tree2new = (AVLTreeTest)tree2;
-			tree2new.join(dummy.getRoot(), (AVLTreeTest)tree);
-			
-			tree2.printTree();
-	}
-	
-	boolean split = true;
-	if (split) {
-		printableTree tree2 = new printableTree();
-		int[] arr2 = {3,4,5,6,7,8,9};
-		for (int val2 : arr2) {
-			//System.out.println("number is : " + val2);
-			String info2 = Integer.toString(val2);
-			tree2.insert(val2, info2);
-			//tree2.printTree();
-			//System.out.println();		
-		}
-		System.out.println();
-		tree2.printTree();
-		
-		AVLTreeTest[] arr = tree2.split(8);
-		System.out.println(arr[0].size());
-		System.out.println(Arrays.toString(arr[0].keysToArray()));
-		System.out.println(Arrays.toString(arr[1].keysToArray()));
-	}
-	printableTree tree4 = new printableTree();
-	 int[] values = new int[]{16, 24, 36, 19, 44, 28, 61}; //74}; 83, 64, 52, 65, 86, 93, 88};
-     for (int val : values) {
-         tree4.insert(val, "" + val);
- 		tree4.printTree();
-
-     }
-     tree4.printTree();
-	
-     printableTree tree5 = new printableTree();
-	 int[] values5 = new int[]{99, 9, 200, 5, 50, 300, 3, 12, 60};
-     for (int val : values5) {
-         tree5.insert(val, "" + val);
-     }
-	tree5.printTree();
-	tree5.delete(99);
-	tree5.printTree();
-	
-	printableTree tree6 = new printableTree();
-	for (int i=0 ; i<100; i++)
-		tree6.insert(i, ""+i);
-	for (int j=0 ; j<50; j++)
-		tree6.delete(j);
-	tree6.delete(90);
-	tree6.delete(91);
-	tree6.delete(92);
-	System.out.println("before deleting 93");
-	tree6.printTree();
-	tree6.delete(93);
-	System.out.println("after deleting 93");
-	tree6.printTree();
-	
-	printableTree tree7 = new printableTree();
-	int[] values7 = new int[]{1,2,3,4,5,6,7};
-    for (int val : values7) {
-        tree7.insert(val, "" + val);
-    }
-    printableTree tree8 = new printableTree();
-    int[] values8 = new int[]{9,10,11,12,13,14,15};
-    for (int val : values8) {
-        tree8.insert(val, "" + val);
-    }
-    System.out.println(tree7.getRank());
-    System.out.println(tree8.getRank());
-    AVLTreeTest dummy = new AVLTreeTest();
-	dummy.insert(8, "8");
-    tree7.join(dummy.root, tree8);
-    System.out.println("tree7 size " + tree7.size());
-    tree7.printTree();
-	
-	printableTree tree7 = new printableTree();
-	int[] values7 = new int[]{1,2,3,4,5,6,7};
-    for (int val : values7) {
-        tree7.insert(val, "" + val);
-    }
-    //tree7.printTree();
-    //System.out.println(tree7.size());
-    tree7.printTree();
-    tree7.delete(4);
-    System.out.println(tree7.size());
-    tree7.printTree();*/
-	
-	
 }
